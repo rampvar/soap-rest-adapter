@@ -1,7 +1,14 @@
 package com.soaprestadapter.request;
 
 import java.util.List;
+import lombok.Getter;
+import lombok.Setter;
 
+/**
+ * Generates Getter and Setter methods.
+ */
+@Getter
+@Setter
 public class WsdlJobRequest {
 
     /**
@@ -14,19 +21,4 @@ public class WsdlJobRequest {
      */
     private List<String> xsdUrls;
 
-    public String getWsdlUrl() {
-        return wsdlUrl;
-    }
-
-    public void setWsdlUrl(final String wsdlUrl) {
-        this.wsdlUrl = wsdlUrl;
-    }
-
-    public List<String> getXsdUrls() {
-        return xsdUrls;
-    }
-
-    public void setXsdUrls(final List<String> xsdUrls) {
-        this.xsdUrls = xsdUrls;
-    }
 }
