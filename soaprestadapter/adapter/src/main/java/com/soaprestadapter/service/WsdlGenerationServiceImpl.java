@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class WsdlGenerationServiceImpl {
+public class WsdlGenerationServiceImpl implements WsdlGenerationService {
 
     /**
      * To call uploadToDB.
