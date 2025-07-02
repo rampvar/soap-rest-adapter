@@ -4,8 +4,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.Arrays;
 import javax.sql.DataSource;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
@@ -18,17 +17,15 @@ import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.transaction.PlatformTransactionManager;
 
-
+/**
+ * Configuration for JPA Other than sqlite DB
+ */
 @Configuration
 @Profile("!sqlite")
 @EnableJpaRepositories(basePackages = "com.soaprestadapter.Repository")
 @EntityScan(basePackages = "com.soaprestadapter.entity")
+@Slf4j
 public class JpaConfig {
-
-    /**
-     * logger initilization
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(JpaConfig.class);
 
     /**
      * Autowire environment to get profile to display
@@ -41,9 +38,15 @@ public class JpaConfig {
      */
     @PostConstruct
     public void init() {
-        LOGGER.info("Active Spring Profiles DB: {}", Arrays.toString(environment.getActiveProfiles()));
+        log.info("Active Spring Profiles DB: {}", Arrays.toString(environment.getActiveProfiles()));
     }
 
+    /**
+     *
+     * @param builder
+     * @param dataSource
+     * @return LocalContainerEntityManagerFactoryBean
+     */
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory(
             final EntityManagerFactoryBuilder builder, final DataSource dataSource) {
@@ -56,6 +59,11 @@ public class JpaConfig {
                 .build();
     }
 
+    /**
+     *
+     * @param emf
+     * @return platformTransactionManager
+     */
 
     @Bean
     public PlatformTransactionManager transactionManager(final EntityManagerFactory emf) {

@@ -7,6 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
 
+/**
+ * Configuration for SQLite database
+ */
 @Configuration
 @Profile("sqlite")
 public class SqliteConfig {
@@ -17,8 +20,12 @@ public class SqliteConfig {
     @Autowired
     private DataSource dataSource;
 
+    /**
+     * JdbcTemplate bean to interact with SQLite database
+     * @return JdbcTemplate bean
+     */
     @Bean
-    public JdbcTemplate jdbcTemplate(final DataSource dataSource) {
+    public JdbcTemplate jdbcTemplate() {
         return new JdbcTemplate(dataSource);
     }
 }

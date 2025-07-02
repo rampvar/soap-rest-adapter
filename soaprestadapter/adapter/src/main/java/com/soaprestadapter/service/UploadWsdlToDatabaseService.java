@@ -10,10 +10,17 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+/**
+ *
+ */
 @Service
+@Slf4j
+@AllArgsConstructor
 public class UploadWsdlToDatabaseService {
 
     /**
@@ -26,8 +33,8 @@ public class UploadWsdlToDatabaseService {
     /**
      * Injected class loader service
      */
-    @Autowired
-    private BlobClassLoaderService classLoaderService;
+    /*@Autowired
+    private BlobClassLoaderService classLoaderService;*/
 
     /**
      *
@@ -35,35 +42,40 @@ public class UploadWsdlToDatabaseService {
      * @param filesPath
      * @throws IOException
      */
-    public void uploadWsdlToDb(final String wsdlUrl , final List<Path> filesPath) throws IOException {
+    void uploadWsdlToDb(final String wsdlUrl, final List<Path> filesPath) {
 
-        System.out.println("Files Path" + filesPath);
+        log.info("Uploading .class files to database: {}", filesPath);
+        byte[] blobData;
+        try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
+            for (Path classFile : filesPath) {
+                if (Files.isRegularFile(classFile) && classFile.toString().endsWith(".class")) {
+                    try {
+                        byte[] classData = Files.readAllBytes(classFile);
+                        byte[] classNameBytes = classFile.getFileName().toString().getBytes(StandardCharsets.UTF_8);
 
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream);
-        for (Path classFile : filesPath) {
-            if (Files.isRegularFile(classFile) && classFile.toString().endsWith(".class")) {
-                try {
-                    byte[] classData = Files.readAllBytes(classFile);
-                    byte[] classNameBytes = classFile.getFileName().toString().getBytes(StandardCharsets.UTF_8);
-
-                    dataOutputStream.writeInt(classNameBytes.length);      // write filename length
-                    dataOutputStream.write(classNameBytes);                // write filename
-                    dataOutputStream.writeInt(classData.length);     // write class byte array length
-                    dataOutputStream.write(classData);
-                } catch (IOException e) {
-                    e.printStackTrace();
+                        dataOutputStream.writeInt(classNameBytes.length);      // write filename length
+                        dataOutputStream.write(classNameBytes);                // write filename
+                        dataOutputStream.writeInt(classData.length);     // write class byte array length
+                        dataOutputStream.write(classData);
+                    } catch (IOException e) {
+                        log.error("Error reading class file Name: {}, Error Message:  {}", classFile, e.getMessage());
+                    }
                 }
             }
-        }
-        dataOutputStream.flush();
-        byte[] blobData = byteArrayOutputStream.toByteArray();
+            dataOutputStream.flush();
+            blobData = byteArrayOutputStream.toByteArray();
 
-        GeneratedWsdlClassEntity wsdlClassEntity = new GeneratedWsdlClassEntity();
-        wsdlClassEntity.setWsdlUrl(wsdlUrl);
-        //wsdlClassEntity.setClassName(classFile.getFileName().toString());
-        wsdlClassEntity.setClassData(blobData);
-        wsdlClassEntity.setGeneratedAt(LocalDateTime.now());
-        storageStrategy.save(wsdlClassEntity);
+            GeneratedWsdlClassEntity wsdlClassEntity = new GeneratedWsdlClassEntity();
+            wsdlClassEntity.setWsdlUrl(wsdlUrl);
+            wsdlClassEntity.setClassData(blobData);
+            wsdlClassEntity.setGeneratedAt(LocalDateTime.now());
+            storageStrategy.save(wsdlClassEntity);
+            //classLoaderService.loadClassesFromDb();
+        } catch (IOException e) {
+            log.error("Error writing class data blob to output stream: {}", e.getMessage());
+        }
+
+
     }
 }

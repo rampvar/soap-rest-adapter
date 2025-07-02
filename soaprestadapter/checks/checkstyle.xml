@@ -8,7 +8,9 @@
     <!-- Checker-level modules -->
     <module name="LineLength">
         <property name="max" value="120"/>
+        <property name="ignorePattern" value="^import|^package.*"/>
     </module>
+
 
     <module name="TreeWalker">
 
@@ -16,6 +18,9 @@
         <module name="JavadocMethod"/>
         <module name="JavadocType"/>
         <module name="JavadocVariable"/>
+        <module name="MissingJavadocMethod"/>
+        <module name="MissingJavadocPackage"/>
+        <module name="MissingJavadocType"/>
 
         <!-- Naming Conventions -->
         <module name="ConstantName"/>
@@ -26,9 +31,21 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
+        <module name="MethodLength"/>
+        <module name="ParameterNumber"/>
+        <module name="AnonInnerLength"/>
+        <module name="OuterTypeNumber"/>
+
         <!-- Imports -->
         <module name="AvoidStarImport"/>
         <module name="ImportOrder"/>
+
+        <!-- Code Complexity -->
+        <module name="CyclomaticComplexity"/>
+        <module name="BooleanExpressionComplexity"/>
+        <module name="ClassDataAbstractionCoupling"/>
+        <module name="ClassFanOutComplexity"/>
+        <module name="NPathComplexity"/>
 
         <!-- Code Structure -->
         <module name="EmptyBlock"/>
@@ -37,9 +54,45 @@
         <module name="NeedBraces"/>
         <module name="VisibilityModifier"/>
 
+        <module name="EmptyStatement"/>
+        <module name="EqualsHashCode"/>
+        <module name="InnerAssignment"/>
+        <module name="MagicNumber"/>
+        <module name="MultipleVariableDeclarations"/>
+        <module name="SimplifyBooleanExpression"/>
+        <module name="SimplifyBooleanReturn"/>
+        <module name="StringLiteralEquality"/>
+        <module name="UnnecessaryParentheses"/>
+        <module name="FallThrough"/>
+        <module name="OverloadMethodsDeclarationOrder"/>
+        <module name="RedundantImport"/>
+        <module name="UnusedImports"/>
+        <module name="HiddenField"/>
+        <module name="ModifiedControlVariable"/>
+
         <!-- Formatting -->
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
+        </module>
+        <!-- Whitespace -->
+        <module name="EmptyForInitializerPad"/>
+        <module name="EmptyForIteratorPad"/>
+        <module name="NoWhitespaceAfter"/>
+        <module name="NoWhitespaceBefore"/>
+        <!--module name="OperatorPad"/>
+        <module name="ParenPad"/>
+        <module name="TypeCastPad"/-->
+        <module name="WhitespaceAfter"/>
+        <module name="WhitespaceAround"/>
+
+        <!-- Miscellaneous Checks -->
+        <module name="ArrayTypeStyle"/>
+        <module name="FinalParameters"/>
+        <module name="Indentation"/>
+        <module name="UpperEll"/>
+        <module name="RegexpSinglelineJava">
+            <property name="format" value="System\.out\.print"/>
+            <property name="message" value="Avoid System.out.print statements."/>
         </module>
 
         <!-- Best Practices -->

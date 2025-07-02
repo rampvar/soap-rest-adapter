@@ -5,6 +5,7 @@ import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import jakarta.annotation.PostConstruct;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
@@ -12,6 +13,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Service;
 
+/**
+ * SQLliteService class implements WsdlToClassStorageStrategy interface for Sqlite DB.
+ */
 @Service
 @Qualifier("sqliteStorage")
 @Profile("sqlite")
@@ -22,10 +26,17 @@ public class SQLliteService implements WsdlToClassStorageStrategy {
      */
     private final JdbcTemplate jdbcTemplate;
 
-    public SQLliteService(final JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    /**
+     * Constructor injecting JdbcTemplate for SQLlite DB
+     * @param   jdbc jdbc template
+     */
+    public SQLliteService(final JdbcTemplate jdbc) {
+        this.jdbcTemplate = jdbc;
     }
 
+    /**
+     * Creating table if not exists in SQLlite DB
+     */
     @PostConstruct
     public void createTable() {
         jdbcTemplate.execute("CREATE TABLE IF NOT EXISTS tbl_generated_wsdl_classes (\n" +
@@ -36,6 +47,10 @@ public class SQLliteService implements WsdlToClassStorageStrategy {
                 ");");
     }
 
+    /**
+     * Saving generated WSDL class to SQLlite DB
+     * @param wsdlClassEntity
+     */
     @Override
     public void save(final GeneratedWsdlClassEntity wsdlClassEntity) {
 
@@ -50,6 +65,10 @@ public class SQLliteService implements WsdlToClassStorageStrategy {
         );
     }
 
+    /**
+     * Finding all generated WSDL classes from SQLlite DB
+     * @return
+     */
     @Override
     public List<GeneratedWsdlClassEntity> findAll() {
         String sql = "SELECT id, wsdl_url, class_data, generated_at FROM tbl_generated_wsdl_classes";
@@ -61,7 +80,7 @@ public class SQLliteService implements WsdlToClassStorageStrategy {
                 entity.setId(result.getLong("id"));
                 entity.setWsdlUrl(result.getString("wsdl_url"));
                 entity.setClassData(result.getBytes("class_data"));
-                entity.setGeneratedAt(result.getTimestamp("generated_at").toLocalDateTime());
+                entity.setGeneratedAt(LocalDateTime.parse(result.getString("generated_at")));
                 return entity;
             }
         });

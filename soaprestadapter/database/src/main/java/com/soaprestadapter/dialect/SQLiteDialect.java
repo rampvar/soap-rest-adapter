@@ -13,6 +13,9 @@ import org.hibernate.type.descriptor.jdbc.IntegerJdbcType;
 import org.hibernate.type.descriptor.jdbc.TimestampJdbcType;
 import org.hibernate.type.descriptor.jdbc.VarcharJdbcType;
 
+/**
+ * Custom SqlDialect Class
+ */
 public class SQLiteDialect extends Dialect {
 
     /**
@@ -24,8 +27,11 @@ public class SQLiteDialect extends Dialect {
      */
     private static final int SQLITE_MINOR_VERSION = 45;
 
+    /**
+     *  Constructor to initialize SQLiteDialect class.
+     */
     public SQLiteDialect() {
-        super(DatabaseVersion.make(SQLITE_MAJOR_VERSION,SQLITE_MINOR_VERSION));
+        super(DatabaseVersion.make(SQLITE_MAJOR_VERSION, SQLITE_MINOR_VERSION));
     }
 
     @Override

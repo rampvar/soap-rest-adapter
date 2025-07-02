@@ -8,14 +8,28 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import java.time.LocalDateTime;
+import lombok.Data;
 
-
+/**
+ * Entity class representing the generated WSDL class data.
+ */
 @Entity
 @Table(name = "tbl_generated_wsdl_classes")
+@Data
 public class GeneratedWsdlClassEntity {
 
     /**
      * Unique identifier for the class record.
+     * -- GETTER --
+     *  Get Id Column
+     *
+     *
+     * -- SETTER --
+     *  Set Id Column
+     *
+     @return Long representing the unique identifier for the class record.
+      * @param classId
+
      */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,12 +37,32 @@ public class GeneratedWsdlClassEntity {
 
     /**
      * The WSDL URL associated with the generated class data.
+     * -- GETTER --
+     *  Get WsdlUrl Column
+     *
+     *
+     * -- SETTER --
+     *  Set WsdlUrl Column
+     *
+     @return  String representing the WSDL URL associated with the generated class data.
+      * @param url
+
      */
     @Column(name = "wsdl_url", nullable = false)
     private String wsdlUrl;
 
     /**
      * The byte array containing the compiled .class file data.
+     * -- GETTER --
+     *  Get ClassData Column
+     *
+     *
+     * -- SETTER --
+     *  Set ClassData Column
+     *
+     @return  byte array containing the compiled .class file data.
+      * @param data
+
      */
     @Lob
     @Column(name = "class_data", nullable = false)
@@ -36,39 +70,18 @@ public class GeneratedWsdlClassEntity {
 
     /**
      * The timestamp indicating when the class data was generated.
+     * -- GETTER --
+     *  Get GeneratedAt Column
+     *
+     *
+     * -- SETTER --
+     *   Set GeneratedAt Column
+     *
+     @return LocalDateTime object representing the timestamp when the class data was generated.
+      * @param generatedTime
+
      */
     @Column(name = "generated_at", nullable = false)
     private LocalDateTime generatedAt;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(final Long id) {
-        this.id = id;
-    }
-
-    public String getWsdlUrl() {
-        return wsdlUrl;
-    }
-
-    public void setWsdlUrl(final String wsdlUrl) {
-        this.wsdlUrl = wsdlUrl;
-    }
-
-    public byte[] getClassData() {
-        return classData;
-    }
-
-    public void setClassData(final byte[] classData) {
-        this.classData = classData;
-    }
-
-    public LocalDateTime getGeneratedAt() {
-        return generatedAt;
-    }
-
-    public void setGeneratedAt(final LocalDateTime generatedAt) {
-        this.generatedAt = generatedAt;
-    }
 }
