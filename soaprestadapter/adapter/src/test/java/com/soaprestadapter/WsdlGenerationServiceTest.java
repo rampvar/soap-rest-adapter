@@ -1,8 +1,8 @@
 package com.soaprestadapter;
 
 
-import com.soaprestadapter.Service.UploadWsdlToDatabaseService;
-import com.soaprestadapter.Service.WsdlGenerationService;
+import com.soaprestadapter.service.UploadWsdlToDatabaseService;
+import com.soaprestadapter.service.WsdlGenerationService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

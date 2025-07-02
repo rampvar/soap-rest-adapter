@@ -1,4 +1,4 @@
-package com.soaprestadapter.Request;
+package com.soaprestadapter.request;
 
 import java.util.List;
 

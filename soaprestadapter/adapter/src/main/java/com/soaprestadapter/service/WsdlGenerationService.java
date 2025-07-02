@@ -1,6 +1,6 @@
-package com.soaprestadapter.Service;
+package com.soaprestadapter.service;
 
-import com.soaprestadapter.Request.WsdlJobRequest;
+import com.soaprestadapter.request.WsdlJobRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;

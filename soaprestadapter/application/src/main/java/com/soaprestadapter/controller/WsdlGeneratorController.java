@@ -1,7 +1,7 @@
-package com.soaprestadapter.Controller;
+package com.soaprestadapter.controller;
 
-import com.soaprestadapter.Request.WsdlJobRequest;
-import com.soaprestadapter.Service.WsdlGenerationService;
+import com.soaprestadapter.request.WsdlJobRequest;
+import com.soaprestadapter.service.WsdlGenerationService;
 import java.io.IOException;
 import java.util.LinkedHashMap;
 import java.util.List;
