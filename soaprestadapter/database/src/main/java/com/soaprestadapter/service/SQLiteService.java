@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -19,20 +20,14 @@ import org.springframework.stereotype.Service;
 @Service
 @Qualifier("sqliteStorage")
 @Profile("sqlite")
-public class SQLliteService implements WsdlToClassStorageStrategy {
+@RequiredArgsConstructor
+public class SQLiteService implements WsdlToClassStorageStrategy {
 
     /**
      * Jdbc Template declaration used for SQLlite DB
      */
     private final JdbcTemplate jdbcTemplate;
 
-    /**
-     * Constructor injecting JdbcTemplate for SQLlite DB
-     * @param   jdbc jdbc template
-     */
-    public SQLliteService(final JdbcTemplate jdbc) {
-        this.jdbcTemplate = jdbc;
-    }
 
     /**
      * Creating table if not exists in SQLlite DB

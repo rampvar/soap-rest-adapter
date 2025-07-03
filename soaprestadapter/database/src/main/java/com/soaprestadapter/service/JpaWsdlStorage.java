@@ -4,6 +4,7 @@ import com.soaprestadapter.Repository.GeneratedWsdlClassRepository;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import java.util.List;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 @Service
 @Qualifier("jpaWsdlStorage")
 @Profile("!sqlite")
+@RequiredArgsConstructor
 public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
 
     /**
@@ -21,13 +23,6 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
      */
     private final GeneratedWsdlClassRepository wsdlClassRepository;
 
-    /**
-     * Constructor injecting repository class
-     * @param wsdlRepository
-     */
-    public JpaWsdlStorage(final GeneratedWsdlClassRepository wsdlRepository) {
-        this.wsdlClassRepository = wsdlRepository;
-    }
 
     /**
      * Method to save WsdlClassEntity to Jpa storage

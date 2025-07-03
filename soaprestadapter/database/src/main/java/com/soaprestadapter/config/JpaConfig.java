@@ -4,8 +4,8 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManagerFactory;
 import java.util.Arrays;
 import javax.sql.DataSource;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.boot.orm.jpa.EntityManagerFactoryBuilder;
 import org.springframework.context.annotation.Bean;
@@ -25,13 +25,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 @EnableJpaRepositories(basePackages = "com.soaprestadapter.Repository")
 @EntityScan(basePackages = "com.soaprestadapter.entity")
 @Slf4j
+@RequiredArgsConstructor
 public class JpaConfig {
 
     /**
      * Autowire environment to get profile to display
      */
-    @Autowired
-    private Environment environment;
+    private final Environment environment;
 
     /**
      * print active db profile
