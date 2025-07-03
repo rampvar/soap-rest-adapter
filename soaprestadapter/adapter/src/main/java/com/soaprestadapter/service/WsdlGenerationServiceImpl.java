@@ -29,7 +29,7 @@ public class WsdlGenerationServiceImpl implements WsdlGenerationService {
     /**
      * To call uploadToDB.
      */
-    private final UploadWsdlToDatabaseService uploadWsdlToDatabaseService;
+    private final UploadWsdlToDatabaseServiceImpl uploadWsdlToDatabaseServiceImpl;
 
     /**
      * listFilenamesForWsdl to list generated files
@@ -100,7 +100,7 @@ public class WsdlGenerationServiceImpl implements WsdlGenerationService {
             runWsdlToJava(cxfArgs);
 
             List<Path> classFilesPaths = getClassFilePaths(outputDir);
-            uploadWsdlToDatabaseService.uploadWsdlToDb(wsdlUrl, classFilesPaths);
+            uploadWsdlToDatabaseServiceImpl.uploadWsdlToDb(wsdlUrl, classFilesPaths);
 
             result.put("java", listFilenamesForWsdl(outputDir, ".java"));
             result.put("class", listFilenamesForWsdl(outputDir, ".class"));
