@@ -24,16 +24,16 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class BlobClassLoaderServiceTest {
 
-    private BlobClassLoaderService service;
-
     @Mock
     private WsdlToClassStorageStrategy repository;
+
+    @InjectMocks
+    private BlobClassLoaderServiceImpl service; // Mockito will inject `repository` here
 
     @BeforeEach
     public void setUp() {
         System.setProperty("db.classes.output.dir", "target/classes");
-        service = new BlobClassLoaderServiceImpl(repository);
-    }
+       }
 
 
     @Test
