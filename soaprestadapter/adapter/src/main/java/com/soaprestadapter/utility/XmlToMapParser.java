@@ -1,14 +1,5 @@
 package com.soaprestadapter.utility;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -16,30 +7,58 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
+
+/**
+ * XmlToMapParser class which converts xml to map
+ */
 public class XmlToMapParser {
 
-    public Map<String, Object> parseXml(String xml) {
-        try {
-            Map<String, Object> result = parseXmlToMap(new ByteArrayInputStream(xml.getBytes()));
-            System.out.println(result);
-            return result;
-        } catch (Exception e) {
-            throw new RuntimeException("Error while parsing xml" + e);
-        }
+    /**
+     * method parseXml
+     *
+     * @param xml
+     * @return map
+     */
+    public Map<String, Object> parseXml(final String xml)
+            throws ParserConfigurationException, IOException, SAXException {
+        Map<String, Object> result = parseXmlToMap(new ByteArrayInputStream(xml.getBytes()));
+        return result;
     }
 
-    public static Map<String, Object> parseXmlToMap(InputStream xmlStream) throws ParserConfigurationException, IOException, SAXException {
+    /**
+     * method parseXmlToMap
+     *
+     * @param xmlStream
+     * @return map
+     */
+    public static Map<String, Object> parseXmlToMap(final InputStream xmlStream)
+            throws ParserConfigurationException,
+            IOException, SAXException {
 
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        factory.setNamespaceAware(true); // Optional: if you want to handle namespaces
+        factory.setNamespaceAware(true);
         DocumentBuilder builder = factory.newDocumentBuilder();
         Document doc = builder.parse(xmlStream);
         Element root = doc.getDocumentElement();
         return parseElement(root);
     }
 
-    private static Map<String, Object> parseElement(Element element) {
+    /**
+     * method parseElement
+     *
+     * @param element
+     * @return map
+     */
+    private static Map<String, Object> parseElement(final Element element) {
         Map<String, Object> map = new LinkedHashMap<>();
         NodeList childNodes = element.getChildNodes();
 
@@ -48,7 +67,8 @@ public class XmlToMapParser {
 
             if (node instanceof Element) {
                 Element childElement = (Element) node;
-                String tag = childElement.getLocalName() != null ? childElement.getLocalName() : childElement.getNodeName();
+                String tag = childElement.getLocalName() != null ?
+                        childElement.getLocalName() : childElement.getNodeName();
 
                 Object value = getValue(childElement);
 
@@ -62,7 +82,6 @@ public class XmlToMapParser {
                         list = new ArrayList<>();
                         list.add(existing);
                     }
-
                     list.add(value);
                     map.put(tag, list);
                 } else {
@@ -74,7 +93,13 @@ public class XmlToMapParser {
         return map;
     }
 
-    private static Object getValue(Element element) {
+    /**
+     * method getValue
+     *
+     * @param element
+     * @return object
+     */
+    private static Object getValue(final Element element) {
         NodeList children = element.getChildNodes();
         boolean hasElementChildren = false;
 

@@ -21,4 +21,7 @@ public interface WsdlToClassStorageStrategy {
      */
     List<GeneratedWsdlClassEntity> findAll();
 
+    String findPayloadOneByOperationName(String operationName);
+    String findPayloadTwoByOperationName(String operationName);
+
 }

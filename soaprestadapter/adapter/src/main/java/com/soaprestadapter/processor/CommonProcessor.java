@@ -1,27 +1,31 @@
 package com.soaprestadapter.processor;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soaprestadapter.service.CobolAttributeService;
-import com.soaprestadapter.utility.PaddingWithJson;
-import com.soaprestadapter.utility.XmlToMapParser;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import com.soaprestadapter.utility.PaddingWithJson;
+import com.soaprestadapter.utility.XmlToMapParser;
+import com.soaprestadapter.service.CobolAttributeService;
 
-import java.util.Map;
 
-@Slf4j
+/**
+ * CommonProcessor class representing common processing in route.
+ */
 @RequiredArgsConstructor
 @Component
 public class CommonProcessor implements Processor {
 
+    /**
+     * CobolAttributeService
+     */
     private final CobolAttributeService service;
 
+
     @Override
-    public void process(Exchange exchange) throws Exception {
+    public void process(final Exchange exchange) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String operation = exchange.getIn().getHeader("operation", String.class);
         XmlToMapParser parser = new XmlToMapParser();
@@ -37,11 +41,11 @@ public class CommonProcessor implements Processor {
         exchange.setProperty("map2", payload1Map);
     }
 
-    private String getPayloadTwo(String operationName) {
+    private String getPayloadTwo(final String operationName) {
         return service.getPayloadTwo(operationName);
     }
 
-    private String getPayloadOne(String operationName) {
+    private String getPayloadOne(final String operationName) {
         return service.getPayloadOne(operationName);
     }
 }

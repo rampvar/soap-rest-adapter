@@ -7,19 +7,29 @@ import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
+/**
+ * RequestDispatcher class
+ */
 @Slf4j
 @RequiredArgsConstructor
 @Component("requestDispatcher")
 public class RequestDispatcher {
 
+    /**
+     * ConnectorFactory
+     */
     private final ConnectorFactory connectorFactory;
 
-    public String run(Map<String, Object> inputData1, Map<String, String> inputData2) {
-        try {
-            String execute = connectorFactory.execute(inputData1, inputData2);
-            return execute;
-        } catch (Exception e) {
-            throw new RuntimeException("Error occurred while executing request dispatcher" + e);
-        }
+
+    /**
+     * run method
+     *
+     * @param inputData1
+     * @param inputData2
+     * @return string
+     */
+    public String run(final Map<String, Object> inputData1, final Map<String, String> inputData2) {
+        String execute = connectorFactory.execute(inputData1, inputData2);
+        return execute;
     }
 }

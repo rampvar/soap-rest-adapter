@@ -4,8 +4,26 @@ import org.springframework.http.ResponseEntity;
 
 import java.util.Map;
 
+/**
+ * connector interface
+ */
 public interface Connector {
 
-    String generatePayload(Map<String, Object> inputData,Map<String, String> inputDataTwo);
-    ResponseEntity<String> sendRequest(String payload,Map<String, String> inputData);
+    /**
+     * run generatePayload
+     *
+     * @param inputData
+     * @param inputDataTwo
+     * @return string
+     */
+    String generatePayload(Map<String, Object> inputData, Map<String, String> inputDataTwo);
+
+    /**
+     * run generatePayload
+     *
+     * @param payload
+     * @param inputData
+     * @return string
+     */
+    ResponseEntity<String> sendRequest(String payload, Map<String, String> inputData);
 }
