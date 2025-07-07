@@ -24,9 +24,12 @@ public class SoapExceptionHandlerRoute extends RouteBuilder {
                 .process(exchange -> {
                     Exception ex = exchange.getProperty(Exchange.EXCEPTION_CAUGHT, Exception.class);
                     ErrorCodeMapper error = ErrorCodeMapper.fromException(ex);
-                    String fullMessage = String.format("Error Code: %s, Message: %s",
+                    String faultMessage = String.format("Error Code: %s, Message: %s",
                             error.getCode(), error.getMessage());
-                    throw SoapFaultUtil.createSoapFault(fullMessage);
+                    String faultType = (error.getCode().startsWith("4")) ? "Client" : "Server";
+                    exchange.setException(
+                            SoapFaultUtil.createSoapFault(faultMessage, faultType)
+                    );
                 });
     }
 }
