@@ -1,0 +1,35 @@
+package com.soaprestadapter.client;
+
+import com.soaprestadapter.factory.ConnectorFactory;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+/**
+ * RequestDispatcher class
+ */
+@Slf4j
+@RequiredArgsConstructor
+@Component("requestDispatcher")
+public class RequestDispatcher {
+
+    /**
+     * ConnectorFactory
+     */
+    private final ConnectorFactory connectorFactory;
+
+
+    /**
+     * run method
+     *
+     * @param inputData1
+     * @param inputData2
+     * @return string
+     */
+    public String run(final Map<String, Object> inputData1, final Map<String, String> inputData2) {
+        String execute = connectorFactory.execute(inputData1, inputData2);
+        return execute;
+    }
+}

@@ -1,0 +1,78 @@
+package com.soaprestadapter.service;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import com.soaprestadapter.factory.Connector;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
+
+import java.util.Map;
+
+/**
+ * BluageServiceImpl class
+ */
+@RequiredArgsConstructor
+@Component("BLUAGE")
+public class BluageServiceImpl implements Connector {
+
+    /**
+     * RestClientService
+     */
+    private final RestClientService service;
+
+    /**
+     * generatePayload execute
+     *
+     * @param inputDataOne
+     * @param inputDataTwo
+     * @return string
+     */
+    @Override
+    public String generatePayload(final Map<String, Object> inputDataOne, final Map<String, String> inputDataTwo) {
+        String jsonOutput;
+        try {
+            ObjectMapper mapper = new ObjectMapper();
+
+            // Root object
+            ObjectNode root = mapper.createObjectNode();
+            root.put("attentionKey", "");
+            root.put("activeRecord", "");
+            root.put("activeField", "");
+            root.put("cursorPosition", 0);
+
+            // Fields array
+            ArrayNode fieldsArray = mapper.createArrayNode();
+            for (Map.Entry<String, Object> entry : inputDataOne.entrySet()) {
+                ObjectNode field = mapper.createObjectNode();
+                field.put("component", "programName");
+                field.put("id", entry.getKey());
+                field.put("value", String.valueOf(entry.getValue()));
+                fieldsArray.add(field);
+            }
+            root.set("fields", fieldsArray);
+            root.put("transactionId", "");
+
+            // Convert to JSON string
+            jsonOutput = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException("Error occurred while generating input for bluage" + e);
+        }
+        return jsonOutput;
+    }
+
+    /**
+     * sendRequest execute
+     *
+     * @param payload
+     * @param inputData1
+     * @return ResponseEntity<String>
+     */
+    @Override
+    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> inputData1) {
+        ResponseEntity<String> process = service.process("BLUAGE", inputData1.get("operationName"), payload);
+        return process;
+    }
+}
