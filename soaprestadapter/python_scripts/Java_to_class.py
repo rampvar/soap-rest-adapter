@@ -9,11 +9,11 @@ import re
 # ✅ Config
 # ---------------------------------------------------
 WSDL_XSD_URLS = [
-    # Example: wsdl + xsd pair
+    # Example: wsdl + xsd pair [keep one after the other]
     "https://raw.githubusercontent.com/raghavM16/test/main/service.wsdl",
     "https://raw.githubusercontent.com/raghavM16/test/main/schema.xsd",
 
-    # Example: standalone wsdl
+    # Example: standalone wsdl[without xsd file]
     "https://raw.githubusercontent.com/raghavM16/test/main/serviceWorking.wsdl"
 ]
 
@@ -22,7 +22,7 @@ OUTPUT_DIR = "generated_classes"
 DB_CONFIG = {
     "database": "mydb",
     "user": "root",
-    "password": "Dongle@99f",
+    "password": "",
     "host": "localhost",
     "port": 3306
 }
