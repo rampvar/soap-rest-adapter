@@ -10,7 +10,12 @@ This script automates:
 📌 REQUIREMENTS:
 --------------------------------------------
 1️⃣ Python Packages:
+<<<<<<< HEAD
 	pip install mysql-connector-python
+=======
+     pip install mysql-connector-python
+
+>>>>>>> 27139ed0418b49716101ddb417606682b1cc34d5
 2️⃣ Java:
    - JDK must be installed.
    - Set JAVA_HOME correctly in the script or your system.
@@ -25,6 +30,7 @@ This script automates:
    - A MySQL server must be running.
    - The DB name, user, password, host and port are defined in the script.
 
+<<<<<<< HEAD
 📌 HOW TO USE:[WSDL+XSD] url and without XSD 
 --------------------------------------------
 ✅ Using WSDL with a linked XSD
@@ -33,6 +39,15 @@ This script automates:
 - If your WSDL depends on an external XSD file, make sure to list the
   WSDL **first** and the XSD **immediately after** in the `WSDL_XSD_URLS` list.
 
+=======
+📌 HOW TO USE WSDL URL?:[WSDL+XSD] url and without XSD url
+--------------------------------------------
+✅ Using WSDL with a linked XSD
+-----------------------------------------------------
+- If your WSDL depends on an external XSD file, make sure to list the
+  WSDL **first** and the XSD **immediately after** in the `WSDL_XSD_URLS` list.
+
+>>>>>>> 27139ed0418b49716101ddb417606682b1cc34d5
   Example:
   WSDL_XSD_URLS = [
       "https://example.com/myService.wsdl",
@@ -50,6 +65,7 @@ This script automates:
       "https://example.com/service2.wsdl",
       "https://example.com/schema2.xsd"
   ]
+<<<<<<< HEAD
 
 - Make sure the URLs are **complete** (`https://...`).
 
@@ -57,6 +73,11 @@ This script automates:
 ✅ Using WSDL **without** XSD
 -----------------------------------------------------
 
+=======
+-----------------------------------------------------
+✅ Using WSDL **without** XSD
+-----------------------------------------------------
+>>>>>>> 27139ed0418b49716101ddb417606682b1cc34d5
 - If your WSDL does not need an external XSD, just list the `.wsdl`
   by itself.
 
@@ -82,7 +103,11 @@ This script automates:
      - Download the WSDL and any linked XSD files.
      - Run `wsdl2java` to generate Java source files.
      - Compile them to .class files.
+<<<<<<< HEAD
      - Insert all .class files as a single blob for each url in `tbl_generated_wsdl_classes`.
+=======
+     - Insert all .class files as a single blob for each wsdl url in `tbl_generated_wsdl_classes`.
+>>>>>>> 27139ed0418b49716101ddb417606682b1cc34d5
 
 📌 OUTPUT:
 --------------------------------------------
