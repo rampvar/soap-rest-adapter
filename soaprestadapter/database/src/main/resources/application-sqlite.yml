@@ -2,6 +2,10 @@ spring:
   datasource:
     url: jdbc:sqlite:mydb.sqlite
     driver-class-name: org.sqlite.JDBC
+  sql:
+    init:
+      mode: always
+      schema-locations: classpath:schema-sqlite.sql
   jpa:
     hibernate:
       ddl-auto: none
