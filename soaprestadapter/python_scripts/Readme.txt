@@ -10,7 +10,6 @@ This script automates:
 📌 REQUIREMENTS:
 --------------------------------------------
 1️⃣ Python Packages:
-
      pip install mysql-connector-python
 
 2️⃣ Java:
@@ -27,10 +26,9 @@ This script automates:
    - A MySQL server must be running.
    - The DB name, user, password, host and port are defined in the script.
 
-<<<<<<< HEAD
-📌 HOW TO USE:[WSDL+XSD] url and without XSD 
+📌 HOW TO USE URL:[WSDL+XSD] url and without XSD 
 --------------------------------------------
-✅ Using WSDL with a linked XSD
+✅ Using WSDL URL with a linked XSD
 -----------------------------------------------------
 
 - If your WSDL depends on an external XSD file, make sure to list the
@@ -62,8 +60,6 @@ This script automates:
       "https://example.com/schema2.xsd"
   ]
 
-
-- Make sure the URLs are **complete** (`https://...`).
 
 -----------------------------------------------------
 ✅ Using WSDL **without** XSD
