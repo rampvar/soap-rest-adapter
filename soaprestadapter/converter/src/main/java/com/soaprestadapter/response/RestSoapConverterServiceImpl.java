@@ -7,8 +7,7 @@ import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
 import java.io.StringWriter;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
@@ -16,12 +15,8 @@ import org.springframework.stereotype.Service;
  * into SOAP-compatible XML using Jackson for JSON and JAXB for XML processing.
  */
 @Service
+@Slf4j
 public class RestSoapConverterServiceImpl implements RestSoapConverterService {
-
-    /**
-     * Logger instance for this class.
-     */
-    private static final Logger LOGGER = LoggerFactory.getLogger(RestSoapConverterServiceImpl.class);
 
     /**
      * Reusable ObjectMapper instance.
@@ -42,7 +37,7 @@ public class RestSoapConverterServiceImpl implements RestSoapConverterService {
             final T response = mapper.readValue(restJsonStringResponse, cls);
             return convertJavaObjectToXML(cls, response);
         } catch (final JsonProcessingException e) {
-            LOGGER.error("Error converting JSON string to Java object", e);
+            log.error("Error converting JSON string to Java object", e);
             throw new ParsingException("Failed to marshal Java object to XML: " + e.getMessage(), e);
         }
     }
@@ -65,11 +60,11 @@ public class RestSoapConverterServiceImpl implements RestSoapConverterService {
             marshaller.marshal(javaObject, sw);
 
             final String xmlResponse = sw.toString();
-            LOGGER.info("XML Response inside service class: \n{}", xmlResponse);
+            log.info("XML Response inside service class: \n{}", xmlResponse);
 
             return xmlResponse;
         } catch (final JAXBException e) {
-            LOGGER.error("Error converting Java object to XML", e);
+            log.error("Error converting Java object to XML", e);
             throw new ParsingException("Failed to convert Java to XML", e);
         }
     }
