@@ -30,8 +30,8 @@ public class ServiceUrlConfig {
      */
     public String getUrl(final String connectorName, final String operationName) {
         Map<String, String> stringStringMap = endpoints.get(connectorName);
-        String s = stringStringMap.get(operationName);
-        return s;
+        String url = stringStringMap.get(operationName);
+        return url;
     }
 }
 

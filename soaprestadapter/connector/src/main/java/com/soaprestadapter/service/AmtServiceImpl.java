@@ -24,19 +24,19 @@ public class AmtServiceImpl implements Connector {
     /**
      * generatePayload execute
      *
-     * @param inputDataOne
-     * @param inputDataTwo
+     * @param jsonPayload
+     * @param requestPayload
      * @return string
      */
     @Override
-    public String generatePayload(final Map<String, Object> inputDataOne, final Map<String, String> inputDataTwo) {
+    public String generatePayload(final Map<String, Object> jsonPayload, final Map<String, String> requestPayload) {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> wrapper = Map.of(
-                    "programName", inputDataTwo.get("programName"),
-                    "operationName", inputDataTwo.get("operationName"),
-                    "parameters", inputDataOne
+                    "programName", requestPayload.get("programName"),
+                    "operationName", requestPayload.get("operationName"),
+                    "parameters", jsonPayload
             );
             return mapper.writeValueAsString(wrapper);
 
@@ -53,8 +53,8 @@ public class AmtServiceImpl implements Connector {
      * @return ResponseEntity<String>
      */
     @Override
-    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> inputData1) {
-        ResponseEntity<String> process = service.process("AMT", inputData1.get("operationName"), payload);
+    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> requestPayload) {
+        ResponseEntity<String> process = service.process("AMT", requestPayload.get("operationName"), payload);
         return process;
     }
 }

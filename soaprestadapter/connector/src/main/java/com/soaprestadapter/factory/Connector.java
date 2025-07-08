@@ -12,18 +12,18 @@ public interface Connector {
     /**
      * run generatePayload
      *
-     * @param inputData
-     * @param inputDataTwo
+     * @param jsonPayload
+     * @param requestPayload
      * @return string
      */
-    String generatePayload(Map<String, Object> inputData, Map<String, String> inputDataTwo);
+    String generatePayload(Map<String, Object> jsonPayload, Map<String, String> requestPayload);
 
     /**
      * run generatePayload
      *
-     * @param payload
-     * @param inputData
+     * @param restPayload
+     * @param requestPayload
      * @return string
      */
-    ResponseEntity<String> sendRequest(String payload, Map<String, String> inputData);
+    ResponseEntity<String> sendRequest(String restPayload, Map<String, String> requestPayload);
 }

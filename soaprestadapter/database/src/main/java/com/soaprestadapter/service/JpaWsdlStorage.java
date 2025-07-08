@@ -23,7 +23,10 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
      *  Inject repository class for Jpa Wsdl Storage
      */
     private final GeneratedWsdlClassRepository wsdlClassRepository;
-    
+
+    /**
+     *  Inject repository class for cobol attributes
+     */
     private final CobolAttributeRepository cobolAttributeRepository;
 
 
@@ -51,7 +54,7 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
      * @return
      */
     @Override
-    public String findPayloadOneByOperationName(String operationName) {
+    public String findPayloadOneByOperationName(final String operationName) {
         return cobolAttributeRepository.findPayloadOneByOperationName(operationName);
     }
 
@@ -60,7 +63,7 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
      * @return
      */
     @Override
-    public String findPayloadTwoByOperationName(String operationName) {
+    public String findPayloadTwoByOperationName(final String operationName) {
         return cobolAttributeRepository.findPayloadTwoByOperationName(operationName);
     }
 }

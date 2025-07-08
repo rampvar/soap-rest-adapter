@@ -26,12 +26,12 @@ public class BluageServiceImpl implements Connector {
     /**
      * generatePayload execute
      *
-     * @param inputDataOne
-     * @param inputDataTwo
+     * @param jsonPayload
+     * @param requestPayload
      * @return string
      */
     @Override
-    public String generatePayload(final Map<String, Object> inputDataOne, final Map<String, String> inputDataTwo) {
+    public String generatePayload(final Map<String, Object> jsonPayload, final Map<String, String> requestPayload) {
         String jsonOutput;
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -45,9 +45,9 @@ public class BluageServiceImpl implements Connector {
 
             // Fields array
             ArrayNode fieldsArray = mapper.createArrayNode();
-            for (Map.Entry<String, Object> entry : inputDataOne.entrySet()) {
+            for (Map.Entry<String, Object> entry : jsonPayload.entrySet()) {
                 ObjectNode field = mapper.createObjectNode();
-                field.put("component", "programName");
+                field.put("component", requestPayload.get("programName"));
                 field.put("id", entry.getKey());
                 field.put("value", String.valueOf(entry.getValue()));
                 fieldsArray.add(field);
@@ -71,8 +71,8 @@ public class BluageServiceImpl implements Connector {
      * @return ResponseEntity<String>
      */
     @Override
-    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> inputData1) {
-        ResponseEntity<String> process = service.process("BLUAGE", inputData1.get("operationName"), payload);
+    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> requestPayload) {
+        ResponseEntity<String> process = service.process("BLUAGE", requestPayload.get("operationName"), payload);
         return process;
     }
 }

@@ -25,7 +25,7 @@ public class InventoryServiceRoute extends RouteBuilder {
         from("direct:TrackOrder")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.map1}, ${exchangeProperty.map2})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
                 .process(exchange -> {
                     exchange.getIn()
                             .setBody(new Gson()
@@ -39,7 +39,7 @@ public class InventoryServiceRoute extends RouteBuilder {
         from("direct:OrderTshirt")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.map1}, ${exchangeProperty.map2})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
                 .process(exchange -> {
                     exchange.getIn()
                             .setBody(new Gson()

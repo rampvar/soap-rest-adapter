@@ -6,9 +6,9 @@ import lombok.RequiredArgsConstructor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
 import org.springframework.stereotype.Component;
+import com.soaprestadapter.service.CobolAttributeService;
 import com.soaprestadapter.utility.PaddingWithJson;
 import com.soaprestadapter.utility.XmlToMapParser;
-import com.soaprestadapter.service.CobolAttributeService;
 
 
 /**
@@ -37,8 +37,8 @@ public class CommonProcessor implements Processor {
         Map<String, String> payload1Map = mapper.readValue(payloadOne, Map.class);
         PaddingWithJson paddingWithJsonSpec = new PaddingWithJson();
         Map<String, Object> updatedMap = paddingWithJsonSpec.processPayload(jsonData, stringObjectMap);
-        exchange.setProperty("map1", updatedMap);
-        exchange.setProperty("map2", payload1Map);
+        exchange.setProperty("mapWithCobolJsonAttribute", updatedMap);
+        exchange.setProperty("mapWithPayload", payload1Map);
     }
 
     private String getPayloadTwo(final String operationName) {

@@ -1,6 +1,5 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.Repository.CobolAttributeRepository;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

@@ -1,6 +1,5 @@
 package com.soaprestadapter.processor;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaprestadapter.service.CobolAttributeService;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;
@@ -8,8 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.ArgumentCaptor;
 
 import java.util.Map;
-
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.*;
 
 public class CommonProcessorTest {
@@ -48,7 +45,7 @@ public class CommonProcessorTest {
 
             // Then
             ArgumentCaptor<Map<String, Object>> mapCaptor = ArgumentCaptor.forClass(Map.class);
-            verify(exchange).setProperty(eq("map1"), mapCaptor.capture());
-            verify(exchange).setProperty(eq("map2"), anyMap());
+            verify(exchange).setProperty(eq("mapWithCobolJsonAttribute"), mapCaptor.capture());
+            verify(exchange).setProperty(eq("mapWithPayload"), anyMap());
         }
     }

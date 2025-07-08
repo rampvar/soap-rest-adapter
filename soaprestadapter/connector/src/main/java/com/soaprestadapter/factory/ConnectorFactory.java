@@ -28,17 +28,17 @@ public class ConnectorFactory {
     /**
      * run execute
      *
-     * @param inputDataOne
-     * @param inputDataTwo
+     * @param jsonPayload
+     * @param requestPayload
      * @return string
      */
-    public String execute(final Map<String, Object> inputDataOne, final Map<String, String> inputDataTwo) {
+    public String execute(final Map<String, Object> jsonPayload, final Map<String, String> requestPayload) {
         String key = properties.getConnector();
         Connector connector = connectorMap.get(key);
         String body;
         if (connector != null) {
-            String payload = connector.generatePayload(inputDataOne, inputDataTwo);
-            ResponseEntity<String> stringResponseEntity = connector.sendRequest(payload, inputDataTwo);
+            String payload = connector.generatePayload(jsonPayload, requestPayload);
+            ResponseEntity<String> stringResponseEntity = connector.sendRequest(payload, requestPayload);
             body = stringResponseEntity.getBody();
         } else {
             throw new IllegalArgumentException("No connector found for key: " + key);
