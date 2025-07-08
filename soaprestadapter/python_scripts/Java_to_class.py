@@ -22,7 +22,7 @@ OUTPUT_DIR = "generated_classes"
 DB_CONFIG = {
     "database": "mydb",
     "user": "root",
-    "password": "Dongle@99f",
+    "password": "",
     "host": "localhost",
     "port": 3306
 }

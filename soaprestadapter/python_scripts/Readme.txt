@@ -10,9 +10,7 @@ This script automates:
 📌 REQUIREMENTS:
 --------------------------------------------
 1️⃣ Python Packages:
-   - mysql-connector-python
-     pip install mysql-connector-python
-
+	pip install mysql-connector-python
 2️⃣ Java:
    - JDK must be installed.
    - Set JAVA_HOME correctly in the script or your system.
@@ -27,16 +25,47 @@ This script automates:
    - A MySQL server must be running.
    - The DB name, user, password, host and port are defined in the script.
 
-📌 HOW TO USE:
+📌 HOW TO USE:[WSDL+XSD] url and without XSD 
 --------------------------------------------
-1️⃣ Update `WSDL_XSD_URLS` list in the script with your own WSDL and XSD URLs.
-   - Example:
-     [
-       "https://yourdomain.com/service.wsdl",
-       "https://yourdomain.com/schema.xsd"
-     ]
+✅ Using WSDL with a linked XSD
+-----------------------------------------------------
 
-   If a WSDL is immediately followed by an XSD in the list, it will treat them as linked.
+- If your WSDL depends on an external XSD file, make sure to list the
+  WSDL **first** and the XSD **immediately after** in the `WSDL_XSD_URLS` list.
+
+  Example:
+  WSDL_XSD_URLS = [
+      "https://example.com/myService.wsdl",
+      "https://example.com/schema1.xsd"
+  ]
+
+- The script will detect that the `.wsdl` is followed by a `.xsd` and
+  will download both, treating them as a single unit.
+
+- You can pair multiple WSDL+XSD sets in the same list:
+  Example:
+  WSDL_XSD_URLS = [
+      "https://example.com/service1.wsdl",
+      "https://example.com/schema1.xsd",
+      "https://example.com/service2.wsdl",
+      "https://example.com/schema2.xsd"
+  ]
+
+- Make sure the URLs are **complete** (`https://...`).
+
+-----------------------------------------------------
+✅ Using WSDL **without** XSD
+-----------------------------------------------------
+
+- If your WSDL does not need an external XSD, just list the `.wsdl`
+  by itself.
+
+  Example:
+  WSDL_XSD_URLS = [
+      "https://example.com/service3.wsdl"
+  ]
+
+- The script will process this WSDL on its own
 
 2️⃣ Update `DB_CONFIG` in the script with your own MySQL credentials.
 
@@ -53,7 +82,7 @@ This script automates:
      - Download the WSDL and any linked XSD files.
      - Run `wsdl2java` to generate Java source files.
      - Compile them to .class files.
-     - Insert all .class files as a single blob in `tbl_generated_wsdl_classes`.
+     - Insert all .class files as a single blob for each url in `tbl_generated_wsdl_classes`.
 
 📌 OUTPUT:
 --------------------------------------------
