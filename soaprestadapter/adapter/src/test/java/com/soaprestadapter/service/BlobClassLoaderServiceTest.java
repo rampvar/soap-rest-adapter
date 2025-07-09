@@ -1,8 +1,7 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
-import org.junit.jupiter.api.BeforeAll;
+import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -106,3 +105,4 @@ public class BlobClassLoaderServiceTest {
         return byteOut.toByteArray();
     }
 }
+
