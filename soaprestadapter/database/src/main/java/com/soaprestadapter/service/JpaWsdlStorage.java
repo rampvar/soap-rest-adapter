@@ -1,5 +1,6 @@
 package com.soaprestadapter.service;
 
+import com.soaprestadapter.Repository.CobolAttributeRepository;
 import com.soaprestadapter.Repository.GeneratedWsdlClassRepository;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
@@ -23,6 +24,11 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
      */
     private final GeneratedWsdlClassRepository wsdlClassRepository;
 
+    /**
+     *  Inject repository class for cobol attributes
+     */
+    private final CobolAttributeRepository cobolAttributeRepository;
+
 
     /**
      * Method to save WsdlClassEntity to Jpa storage
@@ -41,5 +47,23 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
     @Override
     public List<GeneratedWsdlClassEntity> findAll() {
         return wsdlClassRepository.findAll();
+    }
+
+    /**
+     * Method to find all findPayloadOneByOperationName from Jpa storage
+     * @return
+     */
+    @Override
+    public String findPayloadOneByOperationName(final String operationName) {
+        return cobolAttributeRepository.findPayloadOneByOperationName(operationName);
+    }
+
+    /**
+     * Method to find all findPayloadTwoByOperationName from Jpa storage
+     * @return
+     */
+    @Override
+    public String findPayloadTwoByOperationName(final String operationName) {
+        return cobolAttributeRepository.findPayloadTwoByOperationName(operationName);
     }
 }

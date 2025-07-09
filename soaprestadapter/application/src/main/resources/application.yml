@@ -1,0 +1,20 @@
+camel:
+  cxf:
+    inventory: /inventory
+    hello: /hello
+
+spring:
+  profiles:
+    active: mysql
+
+app:
+  connector: AMT
+
+services:
+  endpoints:
+    AMT:
+      TrackOrder: http://localhost:8080/amt/track_order
+      OrderTshirt: http://localhost:8080/amt/order_tshirt
+    BLUAGE:
+      TrackOrder: http://localhost:8080/bluage/track_order
+      OrderTshirt: http://localhost:8080/bluage/order_tshirt
