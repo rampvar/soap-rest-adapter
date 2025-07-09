@@ -1,6 +1,8 @@
 
 package com.soaprestadapter.controller;
 
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -14,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class BluageController {
 
 
-/**
+    /**
      * handleRequest1 method
      *
      * @param data
@@ -22,27 +24,28 @@ public class BluageController {
      */
 
 
-   /* @PostMapping("/order_tshirt")
-    public OrderTshirtResponse handleRequest1(@RequestBody final String data) {
-        OrderTshirtResponse response = new OrderTshirtResponse();
-        response.setOrderId("101");
-        return response;
-    }
-*/
+    @PostMapping("/order_tshirt")
+    public String handleRequest1(@RequestBody final String data) {
 
-/**
+        return "{"
+                + "\"orderId\": \"101\""
+                + "}";
+    }
+
+
+    /**
      * handleRequest2 method
      *
      * @param data
      * @return object
      */
 
-   /* @PostMapping("/track_order")
-    public TrackOrderResponse handleRequest2(@RequestBody final String data) {
-        TrackOrderResponse response = new TrackOrderResponse();
-        response.setSize(Size.M);
-        response.setStatus("Shipped");
-        response.setOrderId("101");
-        return response;
-    }*/
+    @PostMapping("/track_order")
+    public String handleRequest2(@RequestBody final String data) {
+        return "{"
+                + "\"orderId\": \"101\","
+                + "\"status\": \"Alice\","
+                + "\"size\": \"M\""
+                + "}";
+    }
 }

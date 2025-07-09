@@ -1,11 +1,10 @@
 package com.soaprestadapter.factory;
 
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.soaprestadapter.config.ConnectorProperties;
-
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 
 /**
  * ConnectorFactory class
@@ -32,14 +31,14 @@ public class ConnectorFactory {
      * @param requestPayload
      * @return string
      */
-    public String execute(final Map<String, Object> jsonPayload, final Map<String, String> requestPayload) {
+    public String execute(final Map<String, Object> jsonPayload,
+                          final Map<String, String> requestPayload) throws JsonProcessingException {
         String key = properties.getConnector();
         Connector connector = connectorMap.get(key);
         String body;
         if (connector != null) {
             String payload = connector.generatePayload(jsonPayload, requestPayload);
-            ResponseEntity<String> stringResponseEntity = connector.sendRequest(payload, requestPayload);
-            body = stringResponseEntity.getBody();
+            body = connector.sendRequest(payload, requestPayload);
         } else {
             throw new IllegalArgumentException("No connector found for key: " + key);
         }
