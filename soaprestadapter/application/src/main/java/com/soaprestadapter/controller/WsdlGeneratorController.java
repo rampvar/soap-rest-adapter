@@ -1,5 +1,7 @@
 package com.soaprestadapter.controller;
 
+import com.soaprestadapter.factory.ResponseHandler;
+import com.soaprestadapter.factory.ResponseHandlerFactory;
 import com.soaprestadapter.request.WsdlJobRequest;
 import com.soaprestadapter.service.WsdlGenerationServiceImpl;
 import java.io.IOException;
@@ -27,6 +29,10 @@ public class WsdlGeneratorController {
      * WsdlGenerationService.
      */
     private final WsdlGenerationServiceImpl generationService;
+    /**
+     * ResponseHandlerFactory.
+     */
+    private final ResponseHandlerFactory responseHandlerFactory;
 
     /**
      * Rest Endpoint.
@@ -36,6 +42,12 @@ public class WsdlGeneratorController {
     @PostMapping("/from-urls")
     public ResponseEntity<?> generateFromUrls(@RequestBody final List<WsdlJobRequest> jobRequests) throws IOException {
         try {
+            ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("AMT-RESPONSE");
+            if (responseHandler != null) {
+                String resp = "12345John Smith         2512000099dsgljffdiyah0y";
+                String body = responseHandler.convertRestResponse(resp, "testDb");
+                log.info("Converted Response: {}", body);
+            }
             log.info("Request Received");
             Map<String, Map<String, List<String>>> result = generationService.processWsdlUrls(jobRequests);
             log.info("Generated Files:{}", result.toString());

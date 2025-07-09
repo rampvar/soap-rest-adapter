@@ -1,13 +1,15 @@
 package com.soaprestadapter.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaprestadapter.factory.Connector;
+import com.soaprestadapter.factory.ResponseHandler;
+import com.soaprestadapter.factory.ResponseHandlerFactory;
+import java.io.IOException;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.Map;
 
 /**
  * AmtServiceImpl class
@@ -20,6 +22,11 @@ public class AmtServiceImpl implements Connector {
      * RestClientService
      */
     private final RestClientService service;
+
+    /**
+     * ResponseHandlerFactory.
+     */
+    private final ResponseHandlerFactory responseHandlerFactory;
 
     /**
      * generatePayload execute
@@ -53,8 +60,14 @@ public class AmtServiceImpl implements Connector {
      * @return ResponseEntity<String>
      */
     @Override
-    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> requestPayload) {
+    public String sendRequest(final String payload,
+                              final Map<String, String> requestPayload) throws JsonProcessingException {
         ResponseEntity<String> process = service.process("AMT", requestPayload.get("operationName"), payload);
-        return process;
+        ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("AMT-RESPONSE");
+        if (responseHandler != null) {
+            return responseHandler.convertRestResponse(process.getBody(), "testDb");
+
+        }
+        return null;
     }
 }

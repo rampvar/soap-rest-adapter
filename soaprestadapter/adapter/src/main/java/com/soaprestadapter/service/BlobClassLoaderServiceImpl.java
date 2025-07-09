@@ -1,8 +1,10 @@
 package com.soaprestadapter.service;
 
+
 import aj.org.objectweb.asm.ClassReader;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import com.soaprestadapter.config.BlobClassLoader;
+import com.soaprestadapter.config.BlobClassRegistry;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import java.io.ByteArrayInputStream;
 import java.io.DataInputStream;
@@ -22,7 +24,6 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 
-
 /**
  * Service for loading and unpacking class bytecode from the database.
  */
@@ -30,49 +31,58 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 @Slf4j
 public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
-    
+
     /** Repository to access stored class blobs. */
-   
-    private  final WsdlToClassStorageStrategy repository;
+    private final WsdlToClassStorageStrategy repository;
 
     /**
-     * The directory path where class files will be written to at runtime.
-     * Defaults to the standard Maven `target/classes` if not explicitly configured.
+     * Instance of the custom class loader that holds dynamically loaded classes
+     * after being loaded from the database.
      */
+    private BlobClassLoader blobClassLoader;
+
+    /** Output directory to write class files, defaults to target/classes. */
     private String outputDir;
 
     /**
-     * Loads all class blobs from DB and dynamically loads them via custom ClassLoader.
+     * Loads all class blobs from the DB and dynamically loads them via a custom ClassLoader.
+     *
+     * @return a BlobClassLoader instance that can load classes loaded from the database.
      */
-    public void loadClassesFromDb() {
+    @Override
+    public BlobClassLoader loadClassesFromDb() {
         List<GeneratedWsdlClassEntity> classes = safeFetchFromDb();
+        BlobClassLoader loader = null;
 
         if (classes == null || classes.isEmpty()) {
-            return;
+            return null;
         }
 
         Map<String, byte[]> classMap = new HashMap<>();
 
-        // Single try-catch for the full load/unpack process
         try {
             for (GeneratedWsdlClassEntity entity : classes) {
                 byte[] classData = entity.getClassData();
-
-                // Let unpack throw IOException — we'll catch it at method level
                 classMap.putAll(unpack(classData));
             }
 
-            BlobClassLoader loader = new BlobClassLoader(classMap, getClass().getClassLoader());
+            loader = new BlobClassLoader(classMap, getClass().getClassLoader());
 
             for (String className : classMap.keySet()) {
                 Class<?> clazz = loader.loadClass(className);
-                log .info("Loaded: {}", clazz.getName());
+                // ✅ Register the loaded class
+                BlobClassRegistry.registerClass(className, clazz);
+
+                log.debug("Loaded: {}", clazz.getName());
             }
+
         } catch (IOException | URISyntaxException e) {
-            log .warn("Error unpacking class blob: {}", e.getMessage());
-        } catch (ClassNotFoundException | ClassFormatError  e) {
-            log .warn("Class not found during dynamic loading: {}", e.getMessage());
+            log.debug("Error unpacking class blob: {}", e.getMessage(), e);
+        } catch (ClassNotFoundException | ClassFormatError e) {
+            log.debug("Class not found during dynamic loading: {}", e.getMessage(), e);
         }
+
+        return loader;
     }
 
     /**
@@ -84,15 +94,13 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
      */
     private Map<String, byte[]> unpack(final byte[] blobData) throws IOException, URISyntaxException {
         Map<String, byte[]> classMap = new HashMap<>();
-        outputDir =  Paths.get(
+
+        outputDir = Paths.get(
                 getClass().getProtectionDomain().getCodeSource().getLocation().toURI()
         ).toAbsolutePath().normalize().toString();
-        log.info("outputDir*********: {}", outputDir);
-
         if (outputDir == null || outputDir.isBlank()) {
             throw new IllegalStateException(
-                    "System property 'db.classes.output.dir' is not set. " +
-                            "Please configure it in pom.xml or as JVM argument.");
+                    "Output directory is not set. Configure it as a system property or fallback.");
         }
 
         try (DataInputStream dis = new DataInputStream(new ByteArrayInputStream(blobData))) {
@@ -100,7 +108,7 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
                 int nameLen = dis.readInt();
                 byte[] nameBytes = new byte[nameLen];
                 dis.readFully(nameBytes);
-                String fallbackClassName = new String(nameBytes, StandardCharsets.UTF_8); // original name from storage
+                String fallbackClassName = new String(nameBytes, StandardCharsets.UTF_8);
 
                 int byteLen = dis.readInt();
                 byte[] classBytes = new byte[byteLen];
@@ -111,8 +119,7 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
                     ClassReader reader = new ClassReader(classBytes);
                     realClassName = reader.getClassName().replace('/', '.');
                 } catch (IllegalArgumentException | ArrayIndexOutOfBoundsException e) {
-                    log.warn(
-                            "Failed to parse class bytecode for '{}'. Falling back to stored name. Reason: {}",
+                    log.debug("Failed to parse class bytecode for '{}'. Using fallback. Reason: {}",
                             fallbackClassName, e.toString());
                     realClassName = fallbackClassName;
                 }
@@ -128,15 +135,21 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
         return classMap;
     }
 
-
+    /**
+     * Safely fetches class entities from the database with exception handling.
+     *
+     * @return list of class entities or empty list if DB call fails
+     */
     private List<GeneratedWsdlClassEntity> safeFetchFromDb() {
         try {
             return repository.findAll();
         } catch (DataAccessException dae) {
-            log .error("Database fetch failed: {}", dae.getMessage());
+            log.debug("Database fetch failed: {}", dae.getMessage(), dae);
             return Collections.emptyList();
         }
     }
+    @Override
+    public BlobClassLoader getBlobClassLoader() {
+        return this.blobClassLoader;
+    }
 }
-
-

@@ -1,9 +1,6 @@
 
 package com.soaprestadapter.controller;
 
-import org.mulesoft.tshirt_service.OrderTshirtResponse;
-import org.mulesoft.tshirt_service.Size;
-import org.mulesoft.tshirt_service.TrackOrderResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -27,10 +24,10 @@ public class AmtController {
      */
 
     @PostMapping("/order_tshirt")
-    public OrderTshirtResponse handleRequest1(@RequestBody final String data) {
-        OrderTshirtResponse response = new OrderTshirtResponse();
-        response.setOrderId("101");
-        return response;
+    public String handleRequest1(@RequestBody final String data) {
+        return "{"
+                + "\"orderId\": \"101\""
+                + "}";
     }
 
 
@@ -42,11 +39,11 @@ public class AmtController {
      */
 
     @PostMapping("/track_order")
-    public TrackOrderResponse handleRequest2(@RequestBody final String data) {
-        TrackOrderResponse response = new TrackOrderResponse();
-        response.setSize(Size.M);
-        response.setStatus("Shipped");
-        response.setOrderId("101");
-        return response;
+    public String handleRequest2(@RequestBody final String data) {
+        return "{"
+                + "\"orderId\": \"101\","
+                + "\"status\": \"Alice\","
+                + "\"size\": \"M\""
+                + "}";
     }
 }

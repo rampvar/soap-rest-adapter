@@ -1,7 +1,6 @@
 package com.soaprestadapter.factory;
 
-import org.springframework.http.ResponseEntity;
-
+import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.Map;
 
 /**
@@ -25,5 +24,5 @@ public interface Connector {
      * @param requestPayload
      * @return string
      */
-    ResponseEntity<String> sendRequest(String restPayload, Map<String, String> requestPayload);
+    String sendRequest(String restPayload, Map<String, String> requestPayload) throws JsonProcessingException;
 }
