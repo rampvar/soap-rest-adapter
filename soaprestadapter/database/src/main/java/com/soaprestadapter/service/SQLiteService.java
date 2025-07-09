@@ -80,5 +80,23 @@ public class SQLiteService implements WsdlToClassStorageStrategy {
             }
         });
     }
+
+    /**
+     * findPayloadOneByOperationName from SQLlite DB
+     * @return
+     */
+    @Override
+    public String findPayloadOneByOperationName(final String operationName) {
+        return null;
+    }
+
+    /**
+     * findPayloadTwoByOperationName from SQLlite DB
+     * @return
+     */
+    @Override
+    public String findPayloadTwoByOperationName(final String operationName) {
+        return null;
+    }
 }
 
