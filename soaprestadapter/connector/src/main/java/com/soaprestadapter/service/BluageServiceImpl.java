@@ -82,7 +82,7 @@ public class BluageServiceImpl implements Connector {
         ResponseEntity<String> process = service.process("BLUAGE", requestPayload.get("operationName"), payload);
         ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("BLUEAGE-RESPONSE");
         if (responseHandler != null) {
-            return responseHandler.convertRestResponse(process.getBody(), "testDb");
+            return responseHandler.convertRestResponse(process.getBody(), requestPayload.get("operationName"));
         }
         return null;
     }

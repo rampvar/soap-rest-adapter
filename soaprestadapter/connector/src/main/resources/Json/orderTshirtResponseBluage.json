@@ -1,0 +1,47 @@
+{
+    "messages": [
+        {
+            "command": "removeAllComponents"
+        },
+        {
+            "command": "OrderTshirt",
+            "maps": [
+                {
+                    "component": "OrderTshirtResponse",
+                    "startLineNumber": 0,
+                    "fields": [
+                        {
+                            "type": "simple",
+                            "id": "orderId",
+                            "data": "101",
+                            "attributes": {
+                                "intensity": "",
+                                "protection": "",
+                                "num": "",
+                                "forceModified": true,
+                                "numerical": true,
+                                "columnSeparator": true,
+                                "color": "BLUE",
+                                "charsetMode": "",
+                                "highlight": "",
+                                "line": 1,
+                                "column": 7,
+                                "underline": true,
+                                "allowLC": true,
+                                "allowAllBlank": true
+                            },
+                            "initialCursor": true
+                        }
+                    ],
+                    "actionKeys": [],
+                    "functionKeys": [],
+                    "helpMetaData": [],
+                    "screenHelp": {},
+                    "errSfl": false
+                }
+            ]
+        }
+    ],
+    "nextTransID": "CAUP",
+    "serverDescription": ""
+}

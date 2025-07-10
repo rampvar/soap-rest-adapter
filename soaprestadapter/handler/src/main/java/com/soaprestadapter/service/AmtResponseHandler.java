@@ -5,8 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaprestadapter.FetchResponseCopybookDataStrategy;
 import com.soaprestadapter.entity.FetchResponseCopybookDataEntity;
 import com.soaprestadapter.factory.ResponseHandler;
-import com.soaprestadapter.utility.CobolField;
-import com.soaprestadapter.utility.CobolHeaderField;
+import com.soaprestadapter.model.CobolField;
+import com.soaprestadapter.model.CobolHeaderField;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -257,10 +257,13 @@ public class AmtResponseHandler implements ResponseHandler {
      * @param fields - copybook fields
      * @return - extracted values as a map
      */
-    private static Map<String, Object> extractValues(final String record, final List<CobolField> fields) {
+    private static Map<String, Object> extractValues
+    (final String record, final List<CobolField> fields) throws JsonProcessingException {
         Map<String, Object> result = new LinkedHashMap<>();
+        JSONObject obj = new JSONObject(record);
+        String responseString = obj.getString("data");
         for (CobolField field : fields) {
-            String raw = record.substring(field.getStart(), field.getStart() + field.getLength()).trim();
+            String raw = responseString.substring(field.getStart(), field.getStart() + field.getLength()).trim();
             switch (field.getType()) {
                 case "X":
                     result.put(field.getName(), raw);
