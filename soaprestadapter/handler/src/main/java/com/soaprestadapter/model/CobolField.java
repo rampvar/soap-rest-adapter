@@ -1,4 +1,4 @@
-package com.soaprestadapter.utility;
+package com.soaprestadapter.model;
 
 import lombok.Getter;
 import lombok.Setter;
