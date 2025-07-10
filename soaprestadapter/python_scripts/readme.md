@@ -109,7 +109,8 @@ pip install sqlalchemy
 
 
 
-🌐 WSDL/XSD to Java Class Generator & Storage
+## **🧾  WSDL/XSD to Java Class Generator & Storage**
+
 
 This script automates:
 
@@ -120,38 +121,38 @@ This script automates:
 ✅ Storing the generated .class files into a MySQL database table.
 
 
-📌 REQUIREMENTS
+## **📦 REQUIREMENTS**
 
 1️⃣ Python Packages:
 
-pip install mysql-connector-python
+- pip install mysql-connector-python
 
-JDK must be installed.
+- JDK must be installed.
 
-Set JAVA_HOME correctly in the script or your system.
+- Set JAVA_HOME correctly in the script or your system.
 
-Example: JDK 21
+- Example: JDK 21
 
 
 3️⃣ Apache CXF:
 
-Download and extract Apache CXF (tested with version 4.0.4).
+- Download and extract Apache CXF (tested with version 4.0.4).
 
-The wsdl2java.bat must be available under:
+- The wsdl2java.bat must be available under:
 
-C:\Program Files\Java\apache-cxf-4.0.4\bin
+- C:\Program Files\Java\apache-cxf-4.0.4\bin
 
 
 4️⃣ MySQL Database:
 
-A MySQL server must be running.
+- A MySQL server must be running.
 
-The DB name, user, password, host, and port are defined in the script.
+- The DB name, user, password, host, and port are defined in the script.
 
 
-📌 HOW TO USE URL: [WSDL+XSD] and without XSD
+## **📝 HOW TO USE URL**
 
-✅ Using WSDL URL with a linked XSD
+**✅ Using WSDL URL with a linked XSD**
 
 If your WSDL depends on an external XSD file, make sure to list the WSDL first and the XSD immediately after in the WSDL_XSD_URLS list.
 
@@ -178,7 +179,7 @@ WSDL_XSD_URLS = [
 ]
 
 
-✅ Using WSDL without XSD
+**✅ Using WSDL without XSD**
 
 If your WSDL does not need an external XSD, just list the .wsdl by itself.
 
@@ -201,20 +202,21 @@ env["JAVA_HOME"] = r"C:\Program Files\Java\jdk-21"
 env["PATH"] = rf"C:\Program Files\Java\jdk-21\bin;C:\Program Files\Java\apache-cxf-4.0.4\bin;{env['PATH']}"
 
 
-4️⃣ Run the script:
+**4️⃣🚀 Run the script:**
 
 python Java_to_class.py
 
 
-📌 OUTPUT
+## **📦 Output**
+
 Generated class files are stored under the generated_classes folder.
 
 The tbl_generated_wsdl_classes table stores:
 
-Source WSDL URL
+- Source WSDL URL
 
-Binary .class data 
+- Binary .class data 
 
-Generation timestamp
+- Generation timestamp
 
 
