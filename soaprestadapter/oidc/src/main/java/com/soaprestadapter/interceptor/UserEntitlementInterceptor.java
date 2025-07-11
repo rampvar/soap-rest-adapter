@@ -111,9 +111,20 @@ public class UserEntitlementInterceptor implements Processor {
     }
 
     private void setJwtToken(final Message cxfMessage, final Exchange exchange) {
-        String jwtToken = (String) cxfMessage.get("jwt_token");
-        if (StringUtils.isNotBlank(jwtToken)) {
-            exchange.getIn().setHeader("Authorization", jwtToken);
+
+        String token = StringUtils.EMPTY;
+
+        Map<String, List<String>> headers = (Map<String, List<String>>) cxfMessage.get(Message.PROTOCOL_HEADERS);
+        if (headers != null) {
+            List<String> jwtHeader = headers.get("jwt_token");
+            if (jwtHeader != null && !jwtHeader.isEmpty()) {
+                token = jwtHeader.get(0); // first value
+            }
+
+        }
+        log.info("JWT_TOKEN FROM Soap Message {}", token);
+        if (StringUtils.isNotBlank(token)) {
+            exchange.getIn().setHeader("Authorization", token);
         }
     }
 
