@@ -2,6 +2,7 @@ package com.soaprestadapter.route;
 
 import org.apache.camel.Message;
 import org.apache.camel.builder.RouteBuilder;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.springframework.stereotype.Component;
 
@@ -33,7 +34,7 @@ public class SoapAdapterRoute extends RouteBuilder {
                     Message message = exchange.getMessage();
                     SoapMessage camelCXFMessage = (SoapMessage) message.getHeader("CamelCXFMessage");
                     String jwtToken = (String) camelCXFMessage.get("jwt_token");
-                    if (jwtToken != null) {
+                    if (StringUtils.isNotBlank(jwtToken)) {
                         exchange.getIn().setHeader("Authorization", jwtToken);
                     }
                 })
@@ -48,7 +49,7 @@ public class SoapAdapterRoute extends RouteBuilder {
                     Message message = exchange.getMessage();
                     SoapMessage camelCXFMessage = (SoapMessage) message.getHeader("CamelCXFMessage");
                     String jwtToken = (String) camelCXFMessage.get("jwt_token");
-                    if (jwtToken != null) {
+                    if (StringUtils.isNotBlank(jwtToken)) {
                         exchange.getIn().setHeader("Authorization", jwtToken);
                     }
                 })
