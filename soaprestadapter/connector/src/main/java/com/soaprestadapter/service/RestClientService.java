@@ -2,6 +2,7 @@ package com.soaprestadapter.service;
 
 import com.soaprestadapter.config.ServiceUrlConfig;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -55,7 +56,7 @@ public class RestClientService {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        if (jwtTokenRequired && jwt != null) {
+        if (jwtTokenRequired && StringUtils.isNotBlank(jwt)) {
             headers.set("Authorization", "Bearer " + jwt);
         }
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
