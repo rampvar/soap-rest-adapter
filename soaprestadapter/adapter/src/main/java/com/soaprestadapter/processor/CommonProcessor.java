@@ -1,10 +1,10 @@
 package com.soaprestadapter.processor;
 
-import java.util.Map;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaprestadapter.service.CobolAttributeService;
 import com.soaprestadapter.utility.PaddingWithJson;
 import com.soaprestadapter.utility.XmlToMapParser;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;

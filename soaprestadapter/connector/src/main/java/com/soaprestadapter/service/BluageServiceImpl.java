@@ -5,11 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.soaprestadapter.factory.Connector;
+import com.soaprestadapter.factory.ResponseHandler;
+import com.soaprestadapter.factory.ResponseHandlerFactory;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
 
 /**
  * BluageServiceImpl class
@@ -22,6 +23,11 @@ public class BluageServiceImpl implements Connector {
      * RestClientService
      */
     private final RestClientService service;
+
+    /**
+     * ResponseHandlerFactory.
+     */
+    private final ResponseHandlerFactory responseHandlerFactory;
 
     /**
      * generatePayload execute
@@ -71,8 +77,13 @@ public class BluageServiceImpl implements Connector {
      * @return ResponseEntity<String>
      */
     @Override
-    public ResponseEntity<String> sendRequest(final String payload, final Map<String, String> requestPayload) {
+    public String sendRequest(final String payload,
+                              final Map<String, String> requestPayload) throws JsonProcessingException {
         ResponseEntity<String> process = service.process("BLUAGE", requestPayload.get("operationName"), payload);
-        return process;
+        ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("BLUEAGE-RESPONSE");
+        if (responseHandler != null) {
+            return responseHandler.convertRestResponse(process.getBody(), requestPayload.get("operationName"));
+        }
+        return null;
     }
 }
