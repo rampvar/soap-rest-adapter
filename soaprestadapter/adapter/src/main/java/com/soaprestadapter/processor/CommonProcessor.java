@@ -27,6 +27,7 @@ public class CommonProcessor implements Processor {
     public void process(final Exchange exchange) throws Exception {
         ObjectMapper mapper = new ObjectMapper();
         String operation = exchange.getIn().getHeader("operation", String.class);
+        String jwtToken = exchange.getIn().getHeader("Authorization", String.class);
         XmlToMapParser parser = new XmlToMapParser();
         Map<String, Object> stringObjectMap = parser.parseXml(exchange.getIn().getBody(String.class));
 
@@ -38,6 +39,7 @@ public class CommonProcessor implements Processor {
         Map<String, Object> updatedMap = paddingWithJsonSpec.processPayload(jsonData, stringObjectMap);
         exchange.setProperty("mapWithCobolJsonAttribute", updatedMap);
         exchange.setProperty("mapWithPayload", payload1Map);
+        exchange.setProperty("jwtToken", jwtToken);
     }
 
     private String getPayloadTwo(final String operationName) {

@@ -74,12 +74,16 @@ public class BluageServiceImpl implements Connector {
      *
      * @param payload
      * @param requestPayload
+     * @param jwtToken
      * @return ResponseEntity<String>
      */
     @Override
     public String sendRequest(final String payload,
-                              final Map<String, String> requestPayload) throws JsonProcessingException {
-        ResponseEntity<String> process = service.process("BLUAGE", requestPayload.get("operationName"), payload);
+                              final Map<String, String> requestPayload,
+                              final String jwtToken) throws JsonProcessingException {
+        ResponseEntity<String> process = service.process(
+                "BLUAGE",
+                requestPayload.get("operationName"), payload, jwtToken);
         ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("BLUEAGE-RESPONSE");
         if (responseHandler != null) {
             return responseHandler.convertRestResponse(process.getBody(), requestPayload.get("operationName"));
