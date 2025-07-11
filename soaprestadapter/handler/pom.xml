@@ -23,20 +23,9 @@
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>org.apache.camel.springboot</groupId>
 			<artifactId>camel-spring-boot-starter</artifactId>
-			<version>3.21.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-jaxb-starter</artifactId>
-			<version>3.21.1</version>
-		</dependency>
-		<dependency>
-			<groupId>org.apache.camel.springboot</groupId>
-			<artifactId>camel-jaxb-starter</artifactId>
 			<version>3.21.1</version>
 		</dependency>
 		<dependency>
