@@ -68,7 +68,7 @@ soaprestadapter/
 
 # adapter :
 * This module takes wsdl and xsd URLs as parameter and generate .class files which will then converted to blob and storing in databse (tbl_generated_wsdl_classes ,cobol_fixed_length_attributes)
-Sample Curl command to hit the Rest endpoint
+* Sample Curl command to hit the Rest endpoint
 curl --location 'http://localhost:8080/generate/from-urls' \
 --header 'Content-Type: application/json' \
 --data '[
