@@ -26,10 +26,12 @@ public class RequestDispatcher {
      *
      * @param inputData1
      * @param inputData2
+     * @param jwtToken
      * @return string
      */
     public String run(final Map<String, Object> inputData1,
-                      final Map<String, String> inputData2) throws JsonProcessingException {
-        return connectorFactory.execute(inputData1, inputData2);
+                      final Map<String, String> inputData2,
+                      final String jwtToken) throws JsonProcessingException {
+        return connectorFactory.execute(inputData1, inputData2, jwtToken);
     }
 }

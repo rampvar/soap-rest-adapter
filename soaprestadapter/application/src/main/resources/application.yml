@@ -10,6 +10,9 @@ spring:
 app:
   connector: BLUAGE
 
+auth:
+  jwt_token_required: true
+
 services:
   endpoints:
     AMT:

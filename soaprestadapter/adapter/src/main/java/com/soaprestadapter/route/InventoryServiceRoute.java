@@ -33,7 +33,9 @@ public class InventoryServiceRoute extends RouteBuilder {
         from("direct:TrackOrder")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}," +
+                        " ${exchangeProperty.mapWithPayload}," +
+                        " ${exchangeProperty.jwtToken})")
                 .process(exchange -> {
                     String jsonData = exchange.getIn().getBody(String.class);
 
@@ -57,7 +59,9 @@ public class InventoryServiceRoute extends RouteBuilder {
         from("direct:OrderTshirt")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}," +
+                        " ${exchangeProperty.mapWithPayload}," +
+                        " ${exchangeProperty.jwtToken})")
                 .process(exchange -> {
                     String jsonData = exchange.getIn().getBody(String.class);
                     // Dynamically load the TrackOrderResponse class
