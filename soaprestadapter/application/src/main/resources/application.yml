@@ -25,3 +25,26 @@ services:
     BLUAGE:
       TrackOrder: http://localhost:8080/bluage/track_order
       OrderTshirt: http://localhost:8080/bluage/order_tshirt
+
+entitlement:
+  strategy: AWS_IAM # or USER_ROLE_GROUP
+
+environment:
+  aws: local # or Actual
+
+aws:
+  iam:
+    region: us-east-1
+    roleArn: arn:aws:iam::123456789012:role/MyAppRole
+
+iam:
+  roleMappings:
+    alice: AdminRole
+    bob: ReadOnlyRole
+  permissions:
+    AdminRole:
+      - read
+      - write
+      - delete
+    ReadOnlyRole:
+      - read
