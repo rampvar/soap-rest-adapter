@@ -2,10 +2,12 @@ package com.soaprestadapter.route;
 
 import com.soaprestadapter.config.DynamicInvoker;
 import com.soaprestadapter.processor.CommonProcessor;
+import com.soaprestadapter.processor.GenericExceptionProcessor;
 import com.soaprestadapter.response.RestSoapConverterService;
 import lombok.RequiredArgsConstructor;
 import org.apache.camel.builder.RouteBuilder;
 import org.springframework.stereotype.Component;
+
 
 /**
  * InventoryServiceRoute class representing inventory service.
@@ -27,13 +29,26 @@ public class InventoryServiceRoute extends RouteBuilder {
      * RestSoapConverterService for converting REST responses to SOAP XML.
      */
     private final RestSoapConverterService restSoapConverterService;
+    /**
+     * Generic exception processor used to handle exceptions globally.
+     */
+    private final GenericExceptionProcessor exceptionProcessor;
 
     @Override
     public void configure() throws Exception {
+
+        // Global exception handler for this route class
+        onException(Exception.class)
+                .handled(true)
+                .log("Exception occurred in route: ${exception.message}")
+                .process(exceptionProcessor);
+
         from("direct:TrackOrder")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}," +
+                        " ${exchangeProperty.mapWithPayload}," +
+                        " ${exchangeProperty.jwtToken})")
                 .process(exchange -> {
                     String jsonData = exchange.getIn().getBody(String.class);
 
@@ -57,7 +72,9 @@ public class InventoryServiceRoute extends RouteBuilder {
         from("direct:OrderTshirt")
                 .process(commonProcessor)
                 .to("bean:requestDispatcher?" +
-                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}, ${exchangeProperty.mapWithPayload})")
+                        "method=run(${exchangeProperty.mapWithCobolJsonAttribute}," +
+                        " ${exchangeProperty.mapWithPayload}," +
+                        " ${exchangeProperty.jwtToken})")
                 .process(exchange -> {
                     String jsonData = exchange.getIn().getBody(String.class);
                     // Dynamically load the TrackOrderResponse class

@@ -7,8 +7,15 @@ spring:
   profiles:
     active: mysql
 
+soap:
+  fault:
+    namespace: http://schemas.xmlsoap.org/soap/envelope/
+
 app:
   connector: BLUAGE
+
+auth:
+  jwt_token_required: true
 
 services:
   endpoints:

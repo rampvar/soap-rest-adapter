@@ -16,7 +16,7 @@ import software.amazon.awssdk.services.sts.model.StsException;
  */
 @Service
 @Slf4j
-public class AwsIamActualEntitlementService implements EntitlementService {
+public class AwsIamCloudEntitlementService implements EntitlementService {
 
 
     @Override

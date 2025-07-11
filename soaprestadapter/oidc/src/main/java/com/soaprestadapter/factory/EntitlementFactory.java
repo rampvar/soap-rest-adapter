@@ -1,6 +1,6 @@
 package com.soaprestadapter.factory;
 
-import com.soaprestadapter.service.AwsIamActualEntitlementService;
+import com.soaprestadapter.service.AwsIamCloudEntitlementService;
 import com.soaprestadapter.service.AwsIamLocalEntitlementService;
 import com.soaprestadapter.service.EntitlementService;
 import com.soaprestadapter.service.UserRoleGroupEntitlementService;
@@ -18,13 +18,13 @@ import org.springframework.stereotype.Component;
 public class EntitlementFactory {
 
     /**
-     *
+     * Get Strategy from properties
      */
     @Value("${entitlement.strategy}")
     private String strategy;
 
     /**
-     *
+     * Get AWS Environment from properties
      */
     @Value("${environment.aws}")
     private String awsEnvironment;
@@ -37,12 +37,12 @@ public class EntitlementFactory {
     /**
      * AwsIamLocalEntitlementService validate in local aws
      */
-    private final AwsIamLocalEntitlementService awsIamLocalService;
+    private final AwsIamLocalEntitlementService awsIamLocalEntitlementService;
 
     /**
      * AwsIamActualEntitlementService validate in actual aws
      */
-    private final AwsIamActualEntitlementService awsIamActualService;
+    private final AwsIamCloudEntitlementService awsIamCloudEntitlementService;
 
     /**
      *  getEntitlementService based on application properties
@@ -53,9 +53,9 @@ public class EntitlementFactory {
             case "USER_ROLE_GROUP" -> userRoleGroupService;
             case "AWS_IAM" -> {
                 if ("local".equalsIgnoreCase(awsEnvironment)) {
-                    yield awsIamLocalService;
+                    yield awsIamLocalEntitlementService;
                 } else if ("actual".equalsIgnoreCase(awsEnvironment)) {
-                    yield awsIamActualService;
+                    yield awsIamCloudEntitlementService;
                 } else {
                     throw new IllegalArgumentException("Invalid environment.aws value: " + awsEnvironment);
                 }

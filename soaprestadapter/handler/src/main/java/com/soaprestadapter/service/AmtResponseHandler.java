@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.soaprestadapter.FetchResponseCopybookDataStrategy;
 import com.soaprestadapter.entity.FetchResponseCopybookDataEntity;
+import com.soaprestadapter.exception.DataBaseException;
 import com.soaprestadapter.factory.ResponseHandler;
 import com.soaprestadapter.model.CobolField;
 import com.soaprestadapter.model.CobolHeaderField;
@@ -39,6 +40,12 @@ public class AmtResponseHandler implements ResponseHandler {
      * TEN - constant for 10
      */
     private static final int TEN = 10;
+    /**
+     * HTTP status code indicating an internal server error (500).
+     * Used to signal that the server encountered an unexpected condition
+     * that prevented it from fulfilling the request.
+     */
+    private static final int HTTP_INTERNAL_SERVER_ERROR = 500;
 
     /**
      * convert rest response to AMT format
@@ -57,14 +64,13 @@ public class AmtResponseHandler implements ResponseHandler {
      * @param operationName - operation name for which copy book data is required
      * @return - db entry
      */
-    private FetchResponseCopybookDataEntity getCopyBookDataFromDb
-    (final String operationName) throws DataAccessException {
+    private FetchResponseCopybookDataEntity getCopyBookDataFromDb(final String operationName) {
         log.info("Fetching copy book data from database for data: {}", operationName);
         try {
             return repository.getByOperationName(operationName);
         } catch (DataAccessException dae) {
             log .error("Database fetch failed: {}", dae.getMessage());
-            return null;
+            throw new DataBaseException(HTTP_INTERNAL_SERVER_ERROR, "Database fetch failed");
         }
     }
 

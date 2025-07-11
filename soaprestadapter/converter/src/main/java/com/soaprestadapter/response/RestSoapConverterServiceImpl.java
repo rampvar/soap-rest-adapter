@@ -2,6 +2,7 @@ package com.soaprestadapter.response;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.soaprestadapter.exception.ParsingException;
 import jakarta.xml.bind.JAXBContext;
 import jakarta.xml.bind.JAXBException;
 import jakarta.xml.bind.Marshaller;
@@ -16,7 +17,10 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class RestSoapConverterServiceImpl implements RestSoapConverterService {
-
+    /**
+     * HTTP 400 status code for bad request.
+     */
+    private static final int HTTP_BAD_REQUEST = 400;
     /**
      * Reusable ObjectMapper instance.
      */
@@ -37,7 +41,7 @@ public class RestSoapConverterServiceImpl implements RestSoapConverterService {
             return convertJavaObjectToXML(cls, response);
         } catch (final JsonProcessingException e) {
             log.error("Error converting JSON string to Java object", e);
-            throw new RuntimeException("Failed to marshal Java object to XML: " + e.getMessage());
+            throw new ParsingException(HTTP_BAD_REQUEST, "Failed to marshal Java object to XML");
         }
     }
 
@@ -64,7 +68,7 @@ public class RestSoapConverterServiceImpl implements RestSoapConverterService {
             return xmlResponse;
         } catch (final JAXBException e) {
             log.error("Error converting Java object to XML", e);
-            throw new RuntimeException("Failed to convert Java to XML");
+            throw new ParsingException(HTTP_BAD_REQUEST, "Failed to marshal Java object to XML");
         }
     }
 }

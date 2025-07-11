@@ -22,7 +22,10 @@ public interface Connector {
      *
      * @param restPayload
      * @param requestPayload
+     * @param token
      * @return string
      */
-    String sendRequest(String restPayload, Map<String, String> requestPayload) throws JsonProcessingException;
+    String sendRequest(String restPayload,
+                       Map<String, String> requestPayload,
+                       String token) throws JsonProcessingException;
 }

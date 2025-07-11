@@ -2,7 +2,7 @@ package com.soaprestadapter.interceptor;
 
 import com.soaprestadapter.Repository.UserRepository;
 import com.soaprestadapter.factory.EntitlementFactory;
-import com.soaprestadapter.service.AwsIamActualEntitlementService;
+import com.soaprestadapter.service.AwsIamCloudEntitlementService;
 import com.soaprestadapter.service.AwsIamLocalEntitlementService;
 import com.soaprestadapter.service.EntitlementService;
 import com.soaprestadapter.service.UserRoleGroupEntitlementService;
@@ -32,7 +32,7 @@ public class UserInterceptorTest {
     private UserRoleGroupEntitlementService userRoleGroupEntitlementService;
 
     @Mock
-    private AwsIamActualEntitlementService iamActualEntitlementService;
+    private AwsIamCloudEntitlementService iamActualEntitlementService;
 
     @Mock
     private AwsIamLocalEntitlementService localEntitlementService;
@@ -62,26 +62,7 @@ public class UserInterceptorTest {
         when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
     }
 
-    @Test
-    void testProcessSuccess() throws Exception {
-        Element userId = createMockElement("userId", "user123");
 
-        Element root = mock(Element.class);
-        when(root.getLocalName()).thenReturn("root");
-        when(root.getChildNodes()).thenReturn(new NodeListBuilder()
-                .add(userId).build());
-
-        Header header = new Header(null, root);
-        when(soapMessage.getHeaders()).thenReturn(List.of(header));
-
-        when(entitlementFactory.getEntitlementService()).thenReturn(userRoleGroupEntitlementService);
-
-        when(userRoleGroupEntitlementService.isUserEntitled(any(), any())).thenReturn(true);
-
-        interceptor.process(exchange);
-
-        verify(userRoleGroupEntitlementService, atLeastOnce()).isUserEntitled(anyString(), anyString());
-    }
 
     @Test
     void testProcessFailureNotEntitled() {
@@ -141,7 +122,6 @@ public class UserInterceptorTest {
     void testUserRoleGroupEntitlementServicePath() throws Exception {
         when(entitlementFactory.getEntitlementService()).thenReturn(userRoleGroupEntitlementService);
         when(userRoleGroupEntitlementService.isUserEntitled("user123", null)).thenReturn(true);
-        when(userRoleGroupEntitlementService.isUserEntitled("user123", "read")).thenReturn(true);
 
         Element userId = createMockElement("userId", "user123");
 

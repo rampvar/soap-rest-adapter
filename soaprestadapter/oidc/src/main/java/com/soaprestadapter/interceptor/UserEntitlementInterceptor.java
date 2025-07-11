@@ -6,10 +6,12 @@ import com.soaprestadapter.service.UserRoleGroupEntitlementService;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.camel.Exchange;
 import org.apache.camel.Processor;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
 import org.apache.cxf.message.Message;
@@ -59,11 +61,13 @@ public class UserEntitlementInterceptor implements Processor {
 
         SoapMessage soapMessage = validateSoapMessage(cxfMessage);
 
+        setJwtToken(cxfMessage, exchange);
+
         List<Header> headers = soapMessage.getHeaders();
 
-        String userId = null;
-        String userName = null;
-        String action = null;
+        String userId = StringUtils.EMPTY;
+        String userName = StringUtils.EMPTY;
+        String action = StringUtils.EMPTY;
         boolean entitled;
 
         for (Header header : headers) {
@@ -85,7 +89,6 @@ public class UserEntitlementInterceptor implements Processor {
         // Step 3: Extract Authorization header (HTTP)
 
 
-
         if (userId == null || userId.isEmpty()) {
             throw new RuntimeException("userId not found in SOAP request");
         }
@@ -105,6 +108,13 @@ public class UserEntitlementInterceptor implements Processor {
             throw new RuntimeException("User not entitled");
         }
 
+    }
+
+    private void setJwtToken(final Message cxfMessage, final Exchange exchange) {
+        String jwtToken = (String) cxfMessage.get("jwt_token");
+        if (StringUtils.isNotBlank(jwtToken)) {
+            exchange.getIn().setHeader("Authorization", jwtToken);
+        }
     }
 
     private boolean allUserAttributesPresent(final String userId,
@@ -133,8 +143,9 @@ public class UserEntitlementInterceptor implements Processor {
 
     private void traverseAndFind(final Node node, final Map<String, String> result) {
         if (node.getNodeType() == Node.ELEMENT_NODE) {
-            String nodeName = node.getLocalName() != null ? node.getLocalName().toLowerCase() :
-                    node.getNodeName().toLowerCase();
+            String nodeName = Optional.ofNullable(node.getLocalName())
+                    .orElse(node.getNodeName())
+                    .toLowerCase();
             String value = node.getTextContent().trim();
 
             if ("username".equalsIgnoreCase(nodeName) && !result.containsKey("userName")) {
