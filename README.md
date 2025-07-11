@@ -177,13 +177,13 @@ This section defines REST endpoint URLs for different service providers (AMT and
 
 # Supported Databases
 
-| Database   | Driver Dependency                 | Profile Name | Notes                                      |
-|------------|--------------------------------------------------|--------------------------------------------|
-| MySQL      | `mysql:mysql-connector-java`      | `mysql`      | Default profile for production             |
-| H2         | `com.h2database:h2`               | `h2`         | In-memory database for testing             |
-| Oracle     | `com.oracle.database.jdbc:ojdbc8` | `oracle`     | May require manual download due to license |
-| PostgreSQL | `org.postgresql:postgresql`       | `postgres`   | Easy integration with Spring Boot          | 
-| SQLite     | `org.xerial:sqlite-jdbc`          | `sqlite`     | Lightweight, file-based storage            |
+| Database   | Driver Dependency                  | Profile Name | Notes                                      |
+|------------|------------------------------------|--------------|--------------------------------------------|
+| MySQL      | `mysql:mysql-connector-java`       | `mysql`      | Default profile for production             |
+| H2         | `com.h2database:h2`                | `h2`         | In-memory database for testing             |
+| Oracle     | `com.oracle.database.jdbc:ojdbc8`  | `oracle`     | May require manual download due to license |
+| PostgreSQL | `org.postgresql:postgresql`        | `postgres`   | Easy integration with Spring Boot          |
+| SQLite     | `org.xerial:sqlite-jdbc`           | `sqlite`     | Lightweight, file-based storage            |
 
 
 
