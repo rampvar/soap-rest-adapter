@@ -203,6 +203,25 @@ This section defines REST endpoint URLs for different service providers (AMT and
   Refer Readme file in this module .
   https://github.com/rampvar/soap-rest-adapter/blob/main/soaprestadapter/python_scripts/readme.md
 
+# Process to adapt new WSDL
+* If any new service need to be add , then required steps are:
+configure url like below those are configured:
+  curl --location 'http://localhost:8080/generate/from-urls' \
+  --header 'Content-Type: application/json' \
+  --data '[
+  {
+  "wsdlUrl": "https://raw.githubusercontent.com/raghavM16/test/main/service.wsdl",
+  "xsdUrls": ["https://raw.githubusercontent.com/raghavM16/test/main/schema.xsd"]
+  },
+  {
+  "wsdlUrl": "https://raw.githubusercontent.com/raghavM16/test/main/serviceWorking.wsdl",
+  "xsdUrls": []
+  }
+  ]'
+* After that above mentioned flow be executed .
+
+
+
 
 #  How to Build
 
