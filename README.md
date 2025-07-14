@@ -9,9 +9,11 @@
 - [connector](#connector-)
 - [converter](#converter-)
 - [database](#database)
-- [handler](#handler-)
+- [handler](#handler)
+- [oidc](#oidc)
 - [python_scripts](#python_scripts-)
 - [How to Build](#how-to-build)
+
 
 
 
@@ -172,8 +174,8 @@ This section defines REST endpoint URLs for different service providers (AMT and
 # database:
 * Responsible for managing the application's connection to the database. It supports configuration for multiple databases such as H2, MySQL, Oracle, PostgreSQL, and SQLite.
 * Each database type has its specific configuration defined in separate application-<db>.yml files. 
-* To activate a particular database, you must update the main application.yml file located in the application module, which serves as the entry point of the entire system.
-* Dependency need to be added for respective databas:
+* To activate a particular database, you must update the profile as  per db name main application.yml file located in the application module, which serves as the entry point of the entire system.
+* Dependency need to be added for respective database:
 
 # Supported Databases
 
@@ -198,6 +200,24 @@ This section defines REST endpoint URLs for different service providers (AMT and
   Table name: tbl_response_copybook_data
 * The converted Json String is passed to respective converter service which will convert rest response to soap response.
 * Overall the main intention of Handler module is to add capability to convert rest response to specific required format so as to form soap response further.
+
+#  OIDC
+*  User authorization Mechanism is handled through two configurable strategies:
+  * User-Role-Group Mapping
+  * AWS IAM Role-based Authorization
+*  Entitlement Factory Class will decide how we are authorization the user based on the configuration made in application.yml file.
+*  AWS IAM role based authorization is done either in local or cloud environment.
+*  We have interceptor layer which will intercept input request and validate user based on userId for user-role-group authorization.
+*  AWS Iam authorization role is done based on username and action.
+*  Interceptor class will get jwt token from headers and store that token in soap body for future use, will use this jwt token for calling 3rd party services like amt/bluage or other custom endpoints
+     if user is not entitled then throw error message as User Unauthorized.
+
+    # Authorization Server Project
+
+*  Input request will redirect to this server to generate jwt token which will be used in calling Rest endpoin of AMT/AWS blue age/Custom API.
+*  Generated jwt will be set in input xml header fields as key value pair "jwt_token" as key and value as generated token.
+*  Gateway endpoint will be exposed in port defined in application.yml.
+
 
 # python_scripts :
   Refer Readme file in this module .
