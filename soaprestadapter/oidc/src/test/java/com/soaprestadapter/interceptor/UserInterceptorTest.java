@@ -10,15 +10,19 @@ import org.apache.camel.Exchange;
 import org.apache.camel.Message;
 import org.apache.cxf.binding.soap.SoapMessage;
 import org.apache.cxf.headers.Header;
-import org.junit.jupiter.api.BeforeEach;
+import org.apache.cxf.message.MessageImpl;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
+import javax.xml.parsers.DocumentBuilderFactory;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
@@ -56,16 +60,54 @@ public class UserInterceptorTest {
     private UserEntitlementInterceptor interceptor;
 
 
-    @BeforeEach
-    void setUp() {
+    @Test
+    void testProcessSuccessWhenEntitled() throws Exception {
+        // Arrange
+        // 1. Setup entitlementService mock
+        when(entitlementFactory.getEntitlementService()).thenReturn(entitlementService);
+        when(entitlementService.isUserEntitled("john", "read")).thenReturn(true);
+
+        // 2. Create a real DOM Element with userId, userName, action
+        Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().newDocument();
+        Element root = doc.createElement("AuthHeader");
+
+        Element userIdEl = doc.createElement("userId");
+        userIdEl.appendChild(doc.createTextNode("123"));
+        root.appendChild(userIdEl);
+
+        Element userNameEl = doc.createElement("userName");
+        userNameEl.appendChild(doc.createTextNode("john"));
+        root.appendChild(userNameEl);
+
+        Element actionEl = doc.createElement("action");
+        actionEl.appendChild(doc.createTextNode("read"));
+        root.appendChild(actionEl);
+
+        Header soapHeader = new Header(new QName("auth"), root);
+        SoapMessage realSoapMessage = new SoapMessage(new MessageImpl());
+        realSoapMessage.getHeaders().add(soapHeader);
+
+        // 4. Mock protocol headers for JWT
+        Map<String, List<String>> jwtHeaders = Map.of("jwt_token", List.of("mocked-jwt"));
+        realSoapMessage.put(org.apache.cxf.message.Message.PROTOCOL_HEADERS,jwtHeaders);
+
         when(exchange.getIn()).thenReturn(camelMessage);
-        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+        when(camelMessage.getHeader(eq("CamelCxfMessage"), eq(org.apache.cxf.message.Message.class)))
+                .thenReturn(realSoapMessage);
+
+        // Act
+        assertDoesNotThrow(() -> interceptor.process(exchange));
+
+        // Assert
+        verify(entitlementService).isUserEntitled("john", "read");
+        verify(camelMessage).setHeader("Authorization", "mocked-jwt");
     }
-
-
 
     @Test
     void testProcessFailureNotEntitled() {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         Element userIdElement = createMockElement("userId", "user123");
 
 
@@ -86,6 +128,9 @@ public class UserInterceptorTest {
 
     @Test
     void testMissingUserId() {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         Element userNameElement = mock(Element.class);
         when(userNameElement.getLocalName()).thenReturn("userName");
         when(userNameElement.getChildNodes()).thenReturn(new NodeListBuilder().build());
@@ -120,6 +165,9 @@ public class UserInterceptorTest {
 
     @Test
     void testUserRoleGroupEntitlementServicePath() throws Exception {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         when(entitlementFactory.getEntitlementService()).thenReturn(userRoleGroupEntitlementService);
         when(userRoleGroupEntitlementService.isUserEntitled("user123", null)).thenReturn(true);
 
@@ -140,6 +188,9 @@ public class UserInterceptorTest {
 
     @Test
     void testHeaderObjectNotElement() {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         Header invalidHeader = new Header(null, "StringNotXml");
         when(soapMessage.getHeaders()).thenReturn(List.of(invalidHeader));
 
@@ -149,6 +200,9 @@ public class UserInterceptorTest {
 
     @Test
     void testEmptySoapHeaders() {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         when(soapMessage.getHeaders()).thenReturn(List.of());
 
         RuntimeException ex = assertThrows(RuntimeException.class, () -> interceptor.process(exchange));
@@ -156,6 +210,9 @@ public class UserInterceptorTest {
     }
     @Test
     void testInvalidSoapMessageType() {
+        when(exchange.getIn()).thenReturn(camelMessage);
+        when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(soapMessage);
+
         org.apache.cxf.message.Message nonSoap = mock(org.apache.cxf.message.Message.class);
         when(camelMessage.getHeader("CamelCxfMessage", org.apache.cxf.message.Message.class)).thenReturn(nonSoap);
 

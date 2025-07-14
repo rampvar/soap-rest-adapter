@@ -33,7 +33,14 @@ public class UserEntitlementInterceptor implements Processor {
     private final EntitlementFactory entitlementFactory;
 
     private String findUserIdRecursive(final Element node) {
-        if ("userId".equalsIgnoreCase(node.getLocalName())) {
+        if (node == null) {
+            return null;
+        }
+
+        String localName = Optional.ofNullable(node.getLocalName())
+                .orElse(node.getNodeName());
+
+        if ("userId".equalsIgnoreCase(localName)) {
             return node.getTextContent().trim();
         }
         for (int i = 0; i < node.getChildNodes().getLength(); i++) {
