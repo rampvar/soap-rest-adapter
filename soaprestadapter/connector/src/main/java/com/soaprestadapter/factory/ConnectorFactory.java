@@ -29,16 +29,18 @@ public class ConnectorFactory {
      *
      * @param jsonPayload
      * @param requestPayload
+     * @param jwtToken
      * @return string
      */
     public String execute(final Map<String, Object> jsonPayload,
-                          final Map<String, String> requestPayload) throws JsonProcessingException {
+                          final Map<String, String> requestPayload,
+                          final String jwtToken) throws JsonProcessingException {
         String key = properties.getConnector();
         Connector connector = connectorMap.get(key);
         String body;
         if (connector != null) {
             String payload = connector.generatePayload(jsonPayload, requestPayload);
-            body = connector.sendRequest(payload, requestPayload);
+            body = connector.sendRequest(payload, requestPayload, jwtToken);
         } else {
             throw new IllegalArgumentException("No connector found for key: " + key);
         }

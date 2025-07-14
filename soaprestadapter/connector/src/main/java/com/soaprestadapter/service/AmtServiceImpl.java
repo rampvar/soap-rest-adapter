@@ -36,7 +36,8 @@ public class AmtServiceImpl implements Connector {
      * @return string
      */
     @Override
-    public String generatePayload(final Map<String, Object> jsonPayload, final Map<String, String> requestPayload) {
+    public String generatePayload(final Map<String, Object> jsonPayload,
+                                  final Map<String, String> requestPayload) {
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -57,12 +58,14 @@ public class AmtServiceImpl implements Connector {
      *
      * @param payload
      * @param requestPayload
+     * @param jwtToken
      * @return ResponseEntity<String>
      */
     @Override
     public String sendRequest(final String payload,
-                              final Map<String, String> requestPayload) throws JsonProcessingException {
-        ResponseEntity<String> process = service.process("AMT", requestPayload.get("operationName"), payload);
+                              final Map<String, String> requestPayload,
+                              final String jwtToken) throws JsonProcessingException {
+        ResponseEntity<String> process = service.process("AMT", requestPayload.get("operationName"), payload, jwtToken);
         ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("AMT-RESPONSE");
         if (responseHandler != null) {
             return responseHandler.convertRestResponse(process.getBody(), requestPayload.get("operationName"));
