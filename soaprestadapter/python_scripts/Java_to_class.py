@@ -59,7 +59,7 @@ def is_xsd(url):
 
 def download_file(url, local_path):
     urllib.request.urlretrieve(url, local_path)
-    print(f"✅ Downloaded: {local_path}")
+    #print(f"✅ Downloaded: {local_path}")
     return local_path
 
 def download_wsdl_and_linked_xsd(wsdl_url, output_dir, next_xsd_url=None):
@@ -105,7 +105,6 @@ def process_wsdl(wsdl_url, output_dir, next_xsd_url=None):
     print(f"✅ WSDL processed: {wsdl_url}")
 
 
-
 def store_class_files(source_url, output_dir):
     class_data_combined = bytearray()
     file_count = 0
@@ -119,8 +118,20 @@ def store_class_files(source_url, output_dir):
 
     if file_count > 0:
         cursor.execute("""
-            INSERT INTO tbl_generated_wsdl_classes(
-                wsdl_url, class_data, generated_at
+            SELECT id FROM tbl_generated_wsdl_classes WHERE wsdl_url = %s
+        """, (source_url,))
+        existing_entry = cursor.fetchone()
+        # Update the existing database row with new .class files and generation time
+        # so we always store the latest version for this WSDL URL
+        if existing_entry:
+            cursor.execute("""
+                UPDATE tbl_generated_wsdl_classes
+                SET class_data = %s, generated_at = %s WHERE id = %s
+            """, (class_data_combined, datetime.now(), existing_entry[0]))
+        else:
+            cursor.execute("""
+                INSERT INTO tbl_generated_wsdl_classes(
+                    wsdl_url, class_data, generated_at
             ) VALUES (%s, %s, %s)
         """, (source_url, class_data_combined, datetime.now()))
         conn.commit()
