@@ -163,7 +163,7 @@ This section defines REST endpoint URLs for different service providers (AMT and
 * RestClientService class has process method which invokes rest call using restTemplate web client.
 * Json response for particular operation generated in connector module is passed to handler module for further processing.
 
-# converter
+# converter :
 * This module converts a JSON string into a SOAP-compatible XML response.
 * First deserializing the JSON into a Java object of type T using a reusable Jackson ObjectMapper
 * Next marshalling that object into a formatted XML string with the JAXB Marshaller.
@@ -171,7 +171,7 @@ This section defines REST endpoint URLs for different service providers (AMT and
 * It leverages Jackson Databind for JSON processing, Jakarta JAXB API for XML marshalling,
   and Lombok for streamlined logging and code simplification.
 
-# database:
+# database :
 * Responsible for managing the application's connection to the database. It supports configuration for multiple databases such as H2, MySQL, Oracle, PostgreSQL, and SQLite.
 * Each database type has its specific configuration defined in separate application-<db>.yml files. 
 * To activate a particular database, you must update the profile as  per db name main application.yml file located in the application module, which serves as the entry point of the entire system.
@@ -201,7 +201,7 @@ This section defines REST endpoint URLs for different service providers (AMT and
 * The converted Json String is passed to respective converter service which will convert rest response to soap response.
 * Overall the main intention of Handler module is to add capability to convert rest response to specific required format so as to form soap response further.
 
-#  OIDC
+#  OIDC :
 *  User authorization Mechanism is handled through two configurable strategies:
   * User-Role-Group Mapping
   * AWS IAM Role-based Authorization
