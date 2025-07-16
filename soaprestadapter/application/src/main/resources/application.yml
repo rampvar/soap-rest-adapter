@@ -6,6 +6,8 @@ camel:
 spring:
   profiles:
     active: mysql
+  config:
+    import: "classpath:application-wsdl-jobs.yml"
 
 soap:
   fault:
@@ -27,7 +29,7 @@ services:
       OrderTshirt: http://localhost:8080/bluage/order_tshirt
 
 entitlement:
-  strategy: AWS_IAM # or USER_ROLE_GROUP
+  strategy: USER_ROLE_GROUP  # or AWS_IAM
 
 environment:
   aws: local # or Actual
