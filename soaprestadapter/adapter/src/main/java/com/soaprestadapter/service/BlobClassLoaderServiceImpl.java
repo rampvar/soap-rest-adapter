@@ -18,6 +18,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataAccessException;
@@ -44,6 +45,12 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
     /** Output directory to write class files, defaults to target/classes. */
     private String outputDir;
 
+
+    /**
+     * Shared class loader instance
+     */
+    private final Map<String, byte[]> runtimeClassData = new ConcurrentHashMap<>();
+
     /**
      * Loads all class blobs from the DB and dynamically loads them via a custom ClassLoader.
      *
@@ -64,6 +71,57 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
             for (GeneratedWsdlClassEntity entity : classes) {
                 byte[] classData = entity.getClassData();
                 classMap.putAll(unpack(classData));
+            }
+
+            loader = new BlobClassLoader(classMap, getClass().getClassLoader());
+
+            for (String className : classMap.keySet()) {
+                Class<?> clazz = loader.loadClass(className);
+                // ✅ Register the loaded class
+                BlobClassRegistry.registerClass(className, clazz);
+
+                log.debug("Loaded: {}", clazz.getName());
+            }
+
+        } catch (IOException | URISyntaxException e) {
+            log.debug("Error unpacking class blob: {}", e.getMessage(), e);
+        } catch (ClassNotFoundException | ClassFormatError e) {
+            log.debug("Class not found during dynamic loading: {}", e.getMessage(), e);
+        }
+
+        return loader;
+    }
+    /**
+     * Loads a newly inserted class from the database at runtime.
+     * Fetches the blob by ID or timestamp or another identifier.
+     *@return a BlobClassLoader instance that can load new classes loaded from the database.
+     */
+    public BlobClassLoader loadNewClassesAtRuntime() {
+        List<GeneratedWsdlClassEntity> classes = safeFetchFromDb();
+        BlobClassLoader loader = null;
+
+        if (classes == null || classes.isEmpty()) {
+            return null;
+        }
+
+        Map<String, byte[]> classMap = new HashMap<>();
+
+        try {
+            for (GeneratedWsdlClassEntity entity : classes) {
+                byte[] classData = entity.getClassData();
+                Map<String, byte[]> unpackedClasses = unpack(classData);
+
+                for (Map.Entry<String, byte[]> entry : unpackedClasses.entrySet()) {
+                    String className = entry.getKey();
+
+                    // ✅ Skip if class already present in classpath
+                    if (isClassOnClasspath(className)) {
+                        log.info("Class {} already exists on classpath. Skipping dynamic load.", className);
+                        continue;
+                    }
+
+                    classMap.put(className, entry.getValue());
+                }
             }
 
             loader = new BlobClassLoader(classMap, getClass().getClassLoader());
@@ -151,5 +209,16 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
     @Override
     public BlobClassLoader getBlobClassLoader() {
         return this.blobClassLoader;
+    }
+
+    private boolean isClassOnClasspath(final String className) {
+        try {
+            // Uses parent class loader to check classpath
+            Class.forName(className, false, getClass().getClassLoader());
+            log.info("loaded classnames {}:", className);
+            return true;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
     }
 }

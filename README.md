@@ -238,7 +238,7 @@ configure url like below those are configured:
   "xsdUrls": []
   }
   ]'
-* After that above mentioned flow be executed .
+* After that above mentioned flow need to be followed .
 
 
 
