@@ -9,6 +9,7 @@ import com.soaprestadapter.factory.ResponseHandler;
 import com.soaprestadapter.factory.ResponseHandlerFactory;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component("BLUAGE")
+@Slf4j
 public class BluageServiceImpl implements Connector {
 
     /**
@@ -63,6 +65,7 @@ public class BluageServiceImpl implements Connector {
 
             // Convert to JSON string
             jsonOutput = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(root);
+            log.info("Generated payload for BLUAGE: {}", jsonOutput);
         } catch (JsonProcessingException e) {
             throw new RuntimeException("Error occurred while generating input for bluage" + e);
         }
