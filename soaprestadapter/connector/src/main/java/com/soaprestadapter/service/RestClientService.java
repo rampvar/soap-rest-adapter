@@ -1,6 +1,8 @@
 package com.soaprestadapter.service;
 
 import com.soaprestadapter.config.ServiceUrlConfig;
+import com.soaprestadapter.exception.JwtValidationException;
+import com.soaprestadapter.validator.JwtValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -59,6 +61,9 @@ public class RestClientService {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         if (jwtTokenRequired && StringUtils.isNotBlank(jwt)) {
+            if (!JwtValidator.validateToken(jwt)) {
+                throw new JwtValidationException("Invalid JWT token", "401");
+            }
             headers.set("Authorization", "Bearer " + jwt);
         }
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
