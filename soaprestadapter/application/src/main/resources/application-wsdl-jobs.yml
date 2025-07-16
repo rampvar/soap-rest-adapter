@@ -1,0 +1,7 @@
+wsdl-jobs-config:
+  wsdlJobs:
+    - wsdlUrl: https://raw.githubusercontent.com/raghavM16/test/main/service.wsdl
+      xsdUrls:
+        - https://raw.githubusercontent.com/raghavM16/test/main/schema.xsd
+    - wsdlUrl: https://raw.githubusercontent.com/raghavM16/test/main/serviceWorking.wsdl
+      xsdUrls: []
