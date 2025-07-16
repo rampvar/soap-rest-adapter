@@ -31,7 +31,7 @@ public class BlueageResponseHandler implements ResponseHandler {
     @Override
     public String convertRestResponse
     (final String responseBody, final String operationName) throws JsonProcessingException {
-        log.info("Converting rest response");
+        log.info("Rest raw response from target system{}", responseBody);
         JSONObject json = new JSONObject();
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -55,7 +55,7 @@ public class BlueageResponseHandler implements ResponseHandler {
             log.error("Error converting rest response to Blueage format", e);
         }
         // Perform custom conversion logic when required.
-
+        log.info("After conversion to Blueage format: {}", json);
         return json.toString();
     }
 

@@ -1,5 +1,6 @@
 package com.soaprestadapter.factory;
 
+import com.soaprestadapter.exception.IllegalArgumentException;
 import com.soaprestadapter.service.AwsIamCloudEntitlementService;
 import com.soaprestadapter.service.AwsIamLocalEntitlementService;
 import com.soaprestadapter.service.EntitlementService;
@@ -9,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+
 /**
  * EntitlementFactory to load proper entitlement class
  */
@@ -16,7 +18,10 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class EntitlementFactory {
-
+    /**
+     * HTTP 400 status code for bad request.
+     */
+    private static final int HTTP_BAD_REQUEST = 400;
     /**
      * Get Strategy from properties
      */
@@ -48,6 +53,7 @@ public class EntitlementFactory {
      *  getEntitlementService based on application properties
      *  @return EntitlementService
      */
+
     public EntitlementService getEntitlementService() {
         return switch (strategy) {
             case "USER_ROLE_GROUP" -> userRoleGroupService;
@@ -57,10 +63,12 @@ public class EntitlementFactory {
                 } else if ("actual".equalsIgnoreCase(awsEnvironment)) {
                     yield awsIamCloudEntitlementService;
                 } else {
-                    throw new IllegalArgumentException("Invalid environment.aws value: " + awsEnvironment);
+                    throw new IllegalArgumentException(HTTP_BAD_REQUEST,
+                            "Invalid environment.aws value: " + awsEnvironment);
                 }
             }
-            default -> throw new IllegalArgumentException("Invalid strategy: " + strategy);
+            default -> throw new IllegalArgumentException(HTTP_BAD_REQUEST,
+                    "Invalid strategy: " + strategy);
         };
     }
 
