@@ -116,8 +116,7 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
 
                     // ✅ Skip if class already present in classpath
                     if (isClassOnClasspath(className)) {
-                        log.info("Class {} already exists on classpath. Skipping dynamic load.", className);
-                        continue;
+                       continue;
                     }
 
                     classMap.put(className, entry.getValue());

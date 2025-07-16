@@ -1,5 +1,6 @@
 package com.soaprestadapter.service;
 
+import com.soaprestadapter.Repository.GeneratedWsdlClassRepository;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import java.io.ByteArrayOutputStream;
@@ -32,6 +33,12 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
      * Injected class loader service
      */
     private final BlobClassLoaderServiceImpl classLoaderService;
+
+    /**
+     * GeneratedWsdlClassRepository
+     */
+    private  final GeneratedWsdlClassRepository generatedWsdlClassRepository;
+
 
     /**
      *
@@ -76,8 +83,7 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
             } else {
                 log.warn("No valid .class files to upload for WSDL: {}", wsdlUrl);
             }
-
-            classLoaderService.loadClassesFromDb();
+            classLoaderService.loadNewClassesAtRuntime();
         } catch (IOException e) {
             log.error("Error writing class data blob to output stream: {}", e.getMessage());
         }
