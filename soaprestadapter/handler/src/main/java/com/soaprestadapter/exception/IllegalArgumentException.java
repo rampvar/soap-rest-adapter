@@ -3,7 +3,7 @@ package com.soaprestadapter.exception;
 /**
  * Custom exception thrown when parsing fails during REST calls.
  */
-public class DataBaseException extends RuntimeException {
+public class IllegalArgumentException extends RuntimeException {
 
     /**
      * HTTP status code returned from the REST service.
@@ -16,25 +16,25 @@ public class DataBaseException extends RuntimeException {
     private final String responseBody;
 
     /**
-     * Constructs a DataBaseException with the specified status code and response body.
+     * Constructs a IllegalArgumentException with the specified status code and response body.
      *
      * @param statusCodeParam the HTTP status code from the REST response
      * @param responseBodyParam the response body returned from the REST service
      */
-    public DataBaseException(final int statusCodeParam, final String responseBodyParam) {
+    public IllegalArgumentException(final int statusCodeParam, final String responseBodyParam) {
         super(responseBodyParam);
         this.statusCode = statusCodeParam;
         this.responseBody = responseBodyParam;
     }
 
     /**
-     * Constructs a DataBaseException with the specified status code, response body, and detail message.
+     * Constructs a IllegalArgumentException with the specified status code, response body, and detail message.
      *
      * @param statusCodeParam the HTTP status code from the REST response
      * @param responseBodyParam the response body returned from the REST service
      * @param message the detail message
      */
-    public DataBaseException(final int statusCodeParam, final String responseBodyParam, final String message) {
+    public IllegalArgumentException(final int statusCodeParam, final String responseBodyParam, final String message) {
         super(message);
         this.statusCode = statusCodeParam;
         this.responseBody = responseBodyParam;

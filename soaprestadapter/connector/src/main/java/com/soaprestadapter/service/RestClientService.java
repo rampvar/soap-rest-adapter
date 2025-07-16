@@ -2,6 +2,7 @@ package com.soaprestadapter.service;
 
 import com.soaprestadapter.config.ServiceUrlConfig;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,6 +18,7 @@ import org.springframework.web.client.RestTemplate;
  */
 @RequiredArgsConstructor
 @Service
+@Slf4j
 public class RestClientService {
 
 
@@ -60,6 +62,7 @@ public class RestClientService {
             headers.set("Authorization", "Bearer " + jwt);
         }
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
+        log.info("Rest Request Payload: {}", request);
         String url = serviceUrlConfig.getUrl(connectorName, operationName);
 
         return restTemplate.exchange(url,

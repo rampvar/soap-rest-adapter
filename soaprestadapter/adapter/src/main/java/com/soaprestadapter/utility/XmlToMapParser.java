@@ -1,5 +1,6 @@
 package com.soaprestadapter.utility;
 
+import com.soaprestadapter.exception.ParsingException;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -21,17 +22,23 @@ import org.xml.sax.SAXException;
  * XmlToMapParser class which converts xml to map
  */
 public class XmlToMapParser {
-
+    /**
+     * HTTP 400 status code for bad request.
+     */
+    private static final int HTTP_BAD_REQUEST = 400;
     /**
      * method parseXml
      *
      * @param xml
      * @return map
      */
-    public Map<String, Object> parseXml(final String xml)
-            throws ParserConfigurationException, IOException, SAXException {
-        Map<String, Object> result = parseXmlToMap(new ByteArrayInputStream(xml.getBytes()));
-        return result;
+    public Map<String, Object> parseXml(final String xml) {
+        try {
+            Map<String, Object> result = parseXmlToMap(new ByteArrayInputStream(xml.getBytes()));
+            return result;
+        } catch (ParserConfigurationException | SAXException | IOException e) {
+            throw new ParsingException(HTTP_BAD_REQUEST, "Failed to parse the XML. Cause: " + e.getMessage());
+        }
     }
 
     /**
