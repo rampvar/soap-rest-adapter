@@ -81,7 +81,7 @@ public class AmtResponseHandler implements ResponseHandler {
      * @return - converted AMT format json string
      */
     private String processResponseString(final String data, final String operationName) throws JsonProcessingException {
-        log.info("Processing AMT response: {}", data);
+        log.info("Processing AMT Raw response: {}", data);
         if (data == null || data.isEmpty()) {
             log.error("Invalid AMT response data: {}", data);
             return null;
@@ -109,8 +109,12 @@ public class AmtResponseHandler implements ResponseHandler {
             Map<String, Object> extractedVals = extractValues(data, cobolFields);
             ObjectMapper mapper = new ObjectMapper();
             String response = mapper.writerWithDefaultPrettyPrinter().writeValueAsString(extractedVals);
-            return appendResponse(response, responseAttributes);
-
+            log.info("Before AMT specific conversion: {}", response);
+            /**
+             * Uncomment when object to be incorporated in rest response
+             */
+//            return appendResponse(response, responseAttributes);
+            return response;
         } catch (JsonProcessingException e) {
             log.error("Error parsing AMT response: {}", e.getMessage());
         }

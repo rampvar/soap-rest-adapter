@@ -1,8 +1,12 @@
 package com.soaprestadapter.service;
 
 import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.exception.DataBaseException;
+import com.soaprestadapter.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.JDBCException;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,6 +22,12 @@ public class CobolAttributeServiceImpl implements CobolAttributeService {
      */
     //private final CobolAttributeRepository repository;
     private  final WsdlToClassStorageStrategy repository;
+    /**
+     * HTTP status code indicating an internal server error (500).
+     * Used to signal that the server encountered an unexpected condition
+     * that prevented it from fulfilling the request.
+     */
+    private static final int HTTP_INTERNAL_SERVER_ERROR = 500;
 
     /**
      * getPayloadOne method
@@ -27,7 +37,12 @@ public class CobolAttributeServiceImpl implements CobolAttributeService {
      */
     @Override
     public String getPayloadOne(final String operationName) {
-        return repository.findPayloadOneByOperationName(operationName);
+        try {
+            return repository.findPayloadOneByOperationName(operationName);
+        } catch (DataAccessException | IllegalArgumentException | JDBCException e) {
+            throw new DataBaseException(HTTP_INTERNAL_SERVER_ERROR,
+                    "Failed to get data from database payloadOne. Cause: " + e.getMessage());
+        }
     }
 
     /**
@@ -38,6 +53,11 @@ public class CobolAttributeServiceImpl implements CobolAttributeService {
      */
     @Override
     public String getPayloadTwo(final String operationName) {
-        return repository.findPayloadTwoByOperationName(operationName);
+        try {
+            return repository.findPayloadTwoByOperationName(operationName);
+        } catch (DataAccessException | IllegalArgumentException | JDBCException e) {
+            throw new DataBaseException(HTTP_INTERNAL_SERVER_ERROR,
+                    "Failed to get data from database payloadTwo. Cause: " + e.getMessage());
+        }
     }
 }

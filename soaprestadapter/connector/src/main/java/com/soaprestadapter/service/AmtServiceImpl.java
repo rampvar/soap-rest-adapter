@@ -8,6 +8,7 @@ import com.soaprestadapter.factory.ResponseHandlerFactory;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component("AMT")
+@Slf4j
 public class AmtServiceImpl implements Connector {
 
     /**
@@ -38,7 +40,7 @@ public class AmtServiceImpl implements Connector {
     @Override
     public String generatePayload(final Map<String, Object> jsonPayload,
                                   final Map<String, String> requestPayload) {
-
+        log.info("Inside AMTServiceImpl");
         try {
             ObjectMapper mapper = new ObjectMapper();
             Map<String, Object> wrapper = Map.of(
@@ -46,6 +48,7 @@ public class AmtServiceImpl implements Connector {
                     "operationName", requestPayload.get("operationName"),
                     "parameters", jsonPayload
             );
+            log.info("Generated AMT payload: {}", mapper.writeValueAsString(wrapper));
             return mapper.writeValueAsString(wrapper);
 
         } catch (IOException e) {
