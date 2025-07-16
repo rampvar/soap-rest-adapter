@@ -8,6 +8,7 @@ import com.soaprestadapter.factory.ResponseHandlerFactory;
 import java.io.IOException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Component;
  */
 @RequiredArgsConstructor
 @Component("AMT")
+@Slf4j
 public class AmtServiceImpl implements Connector {
 
     /**
@@ -38,6 +40,9 @@ public class AmtServiceImpl implements Connector {
     @Override
     public String generatePayload(final Map<String, Object> jsonPayload,
                                   final Map<String, String> requestPayload) {
+
+        log.info("jsonPayload is {}", jsonPayload);
+        log.info("requestPayload is {}", requestPayload);
 
         try {
             ObjectMapper mapper = new ObjectMapper();
@@ -66,6 +71,7 @@ public class AmtServiceImpl implements Connector {
                               final Map<String, String> requestPayload,
                               final String jwtToken) throws JsonProcessingException {
         ResponseEntity<String> process = service.process("AMT", requestPayload.get("operationName"), payload, jwtToken);
+        log.info("Rest Response {}", process.getBody());
         ResponseHandler responseHandler = responseHandlerFactory.getResponseHandler("AMT-RESPONSE");
         if (responseHandler != null) {
             return responseHandler.convertRestResponse(process.getBody(), requestPayload.get("operationName"));
