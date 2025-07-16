@@ -1,0 +1,16 @@
+{
+  "attentionKey" : "",
+  "activeRecord" : "",
+  "activeField" : "",
+  "cursorPosition" : 0,
+  "fields" : [ {
+    "component" : "sample_cobol2",
+    "id" : "orderId",
+    "value" : "123  "
+  }, {
+    "component" : "sample_cobol2",
+    "id" : "email",
+    "value" : "abc@gmail.com    "
+  } ],
+  "transactionId" : ""
+}
