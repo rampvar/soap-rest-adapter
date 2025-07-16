@@ -22,7 +22,7 @@ public class LoadClassesAtBootstrapServiceImpl implements LoadClassesAtBootstrap
     private final WsdlJobProperties wsdlJobProperties;
 
     @Override
-    public void loadClassAtBootstrap() throws Exception {
+    public void loadWsdlClassAtBootstrap() throws Exception {
         generationService.processWsdlUrls(wsdlJobProperties.getWsdlJobs());
     }
 }
