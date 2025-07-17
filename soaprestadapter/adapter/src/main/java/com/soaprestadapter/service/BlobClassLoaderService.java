@@ -10,10 +10,16 @@ public interface BlobClassLoaderService {
 
     /**
      * Loads compiled class files from the database and initializes a custom class loader.
-     *
      * @return a {@link BlobClassLoader} instance that contains all dynamically loaded classes
      */
     BlobClassLoader loadClassesFromDb();
+
+    /**
+     * Loads compiled class files from the database and initializes a custom class loader.
+     *
+     * @return a {@link BlobClassLoader} instance that contains all newly loaded classes at runtime
+     */
+    BlobClassLoader loadNewClassesAtRuntime();
 
     /**
      * Returns the current {@link BlobClassLoader} instance previously loaded from the database.
