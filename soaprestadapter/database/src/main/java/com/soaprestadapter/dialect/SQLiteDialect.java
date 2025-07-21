@@ -34,6 +34,11 @@ public class SQLiteDialect extends Dialect {
         super(DatabaseVersion.make(SQLITE_MAJOR_VERSION, SQLITE_MINOR_VERSION));
     }
 
+    /**
+     *
+     * @param typeContributions
+     * @param serviceRegistry
+     */
     @Override
     public void contributeTypes(final TypeContributions typeContributions,
                                 final ServiceRegistry serviceRegistry) {
@@ -49,17 +54,29 @@ public class SQLiteDialect extends Dialect {
                 addDescriptor(SqlTypes.BLOB, BlobJdbcType.DEFAULT);
     }
 
+    /**
+     * IdentityColumnSupport
+     * @return IdentityColumnSupport
+     */
     @Override
     public IdentityColumnSupport getIdentityColumnSupport() {
         return new IdentityColumnSupportImpl();
     }
 
 
+    /**
+     * supportsIfExistsBeforeTableName
+     * @return boolean
+     */
     @Override
     public boolean supportsIfExistsBeforeTableName() {
         return true;
     }
 
+    /**
+     * supportsCascadeDelete
+     * @return boolean
+     */
     @Override
     public boolean supportsCascadeDelete() {
         return false;

@@ -36,6 +36,10 @@ public class GenericExceptionProcessor implements Processor {
     private static final int HTTP_INTERNAL_SERVER_ERROR = 500;
 
 
+    /**
+     * method name processing the exception and creating the SOAP fault.
+     * @param exchange  the message exchange
+     */
     @Override
     public void process(final Exchange exchange) {
 

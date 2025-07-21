@@ -34,7 +34,6 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
     private final BlobClassLoaderServiceImpl classLoaderService;
 
     /**
-     *
      * @param wsdlUrl
      * @param filesPath
      * @throws IOException
@@ -48,7 +47,7 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
         log.info("Uploading .class files to database: {}", filesPath);
         byte[] blobData;
         try (ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-             DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
+                 DataOutputStream dataOutputStream = new DataOutputStream(byteArrayOutputStream)) {
             for (Path classFile : filesPath) {
                 if (Files.isRegularFile(classFile) && classFile.toString().endsWith(".class")) {
                     try {

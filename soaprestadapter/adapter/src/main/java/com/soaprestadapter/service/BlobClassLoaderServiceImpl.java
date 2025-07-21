@@ -148,6 +148,11 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
             return Collections.emptyList();
         }
     }
+
+    /**
+     *  method name getBlobClassLoader
+     * @return BlobClassLoader
+     */
     @Override
     public BlobClassLoader getBlobClassLoader() {
         return this.blobClassLoader;

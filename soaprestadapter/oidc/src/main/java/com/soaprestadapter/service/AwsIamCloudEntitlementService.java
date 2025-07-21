@@ -19,6 +19,12 @@ import software.amazon.awssdk.services.sts.model.StsException;
 public class AwsIamCloudEntitlementService implements EntitlementService {
 
 
+    /**
+     * Simulate a permission check by checking if the provided action is allowed for the given role ARN
+     * @param username username of the user for whom the entitlement is checked
+     * @param action action to be performed
+     * @return
+     */
     @Override
     public boolean isUserEntitled(final String username, final String action) {
         log.info("Actual AWS Iam Entitlement");

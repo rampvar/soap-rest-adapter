@@ -13,5 +13,5 @@ public interface ResponseHandler {
      * @param operationName The name of the operation for which the response is being handled.
      * @return The converted json string.
      */
-    String convertRestResponse(final String responseBody, final String operationName) throws JsonProcessingException;
+    String convertRestResponse(String responseBody, String operationName) throws JsonProcessingException;
 }
