@@ -34,9 +34,12 @@ public class InventoryServiceRoute extends RouteBuilder {
      */
     private final GenericExceptionProcessor exceptionProcessor;
 
+    /**
+     * Configures the route for the inventory service.
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
-
         // Global exception handler for this route class
         onException(Exception.class)
                 .handled(true)
@@ -51,22 +54,17 @@ public class InventoryServiceRoute extends RouteBuilder {
                         " ${exchangeProperty.jwtToken})")
                 .process(exchange -> {
                     String jsonData = exchange.getIn().getBody(String.class);
-
                     // Dynamically load the TrackOrderResponse class
                     Class<?> responseClass = dynamicInvoker.getLoadedClass(
                             "org.mulesoft.tshirt_service.TrackOrderResponse");
-
                     if (responseClass == null) {
                         throw new ClassNotFoundException(
                                 "Class not found: org.mulesoft.tshirt_service.TrackOrderResponse");
                     }
-
                     // Call the conversion method with the actual Class object
                     String soapXml = restSoapConverterService.convertRestResponseToSoapXml(jsonData, responseClass);
                     exchange.getIn().setBody(soapXml);
                     log.info("Received Response SoapXml:{}", soapXml);
-
-
                 }).log("Response SoapXml:${body}");
 
         from("direct:OrderTshirt")
@@ -85,11 +83,9 @@ public class InventoryServiceRoute extends RouteBuilder {
                         throw new ClassNotFoundException(
                                 "Class not found: org.mulesoft.tshirt_service.OrderTshirtResponse");
                     }
-
                     // Call the conversion method with the actual Class object
                     String soapXml = restSoapConverterService.convertRestResponseToSoapXml(jsonData, responseClass);
                     exchange.getIn().setBody(soapXml);
-
                 }).log("Response SoapXml:${body}");
     }
 }

@@ -14,5 +14,5 @@ public interface WsdlGenerationService {
      * @return will return list of generated fileNames
      */
     Map<String, Map<String, List<String>>> processWsdlUrls
-            (final List<WsdlJobRequest> jobRequests) throws Exception;
+            (List<WsdlJobRequest> jobRequests) throws Exception;
 }

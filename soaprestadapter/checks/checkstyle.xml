@@ -6,6 +6,10 @@
 <module name="Checker">
 
     <!-- Checker-level modules -->
+    <module name="FileTabCharacter"/>
+    <module name="FileLength">
+        <property name="max" value="2000"/>
+    </module>
     <module name="LineLength">
         <property name="max" value="120"/>
         <property name="ignorePattern" value="^import|^package.*"/>
@@ -31,7 +35,9 @@
         <module name="StaticVariableName"/>
         <module name="TypeName"/>
 
-        <module name="MethodLength"/>
+        <module name="MethodLength">
+            <property name="max" value="50"/>
+        </module>
         <module name="ParameterNumber"/>
         <module name="AnonInnerLength"/>
         <module name="OuterTypeNumber"/>
@@ -41,11 +47,30 @@
         <module name="ImportOrder"/>
 
         <!-- Code Complexity -->
-        <module name="CyclomaticComplexity"/>
-        <module name="BooleanExpressionComplexity"/>
-        <module name="ClassDataAbstractionCoupling"/>
-        <module name="ClassFanOutComplexity"/>
+        <module name="CyclomaticComplexity">
+            <property name="max" value="10"/>
+        </module>
+        <module name="BooleanExpressionComplexity">
+            <property name="max" value="3"/>
+        </module>
+        <module name="ClassDataAbstractionCoupling">
+            <property name="max" value="10"/>
+        </module>
+        <module name="ClassFanOutComplexity">
+            <property name="max" value="20"/>
+        </module>
+        <module name="NestedIfDepth">
+            <property name="max" value="3"/>
+        </module>
+        <module name="NestedTryDepth">
+            <property name="max" value="1"/>
+        </module>
         <module name="NPathComplexity"/>
+        <module name="FinalClass"/>
+        <module name="DesignForExtension"/>
+        <module name="IllegalInstantiation">
+            <property name="classes" value="java.util.Date, java.util.Calendar"/>
+        </module>
 
         <!-- Code Structure -->
         <module name="EmptyBlock"/>
@@ -60,6 +85,8 @@
         <module name="MagicNumber"/>
         <module name="MultipleVariableDeclarations"/>
         <module name="SimplifyBooleanExpression"/>
+        <module name="SuperClone"/>
+        <module name="SuperFinalize"/>
         <module name="SimplifyBooleanReturn"/>
         <module name="StringLiteralEquality"/>
         <module name="UnnecessaryParentheses"/>
@@ -73,6 +100,9 @@
         <!-- Formatting -->
         <module name="Indentation">
             <property name="basicOffset" value="4"/>
+            <property name="braceAdjustment" value="0"/>
+            <property name="caseIndent" value="4"/>
+            <property name="lineWrappingIndentation" value="8"/>
         </module>
         <!-- Whitespace -->
         <module name="EmptyForInitializerPad"/>
@@ -102,6 +132,9 @@
         <module name="EqualsAvoidNull"/>
         <module name="IllegalCatch"/>
         <module name="FinalParameters"/>
+        <module name="MissingOverride"/>
+        <module name="IllegalInstantiation"/>
+        <module name="RedundantModifier"/>
 
     </module>
 </module>

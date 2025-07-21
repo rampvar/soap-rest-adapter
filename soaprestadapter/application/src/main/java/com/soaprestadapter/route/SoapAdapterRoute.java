@@ -27,6 +27,10 @@ public class SoapAdapterRoute extends RouteBuilder {
      */
     public static final String HELLO_ID = "HelloServiceWsdlRoute";
 
+    /**
+     * Configure the route.
+     * @throws Exception
+     */
     @Override
     public void configure() throws Exception {
         from("cxf:{{camel.cxf.inventory}}" +

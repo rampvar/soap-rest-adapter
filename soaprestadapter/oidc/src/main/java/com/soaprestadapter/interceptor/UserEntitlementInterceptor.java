@@ -63,20 +63,14 @@ public class UserEntitlementInterceptor implements Processor {
     @Override
     public void process(final Exchange exchange) throws Exception {
         log.info("Inside Processing User Entitlement Interceptor");
-
         Message cxfMessage = exchange.getIn().getHeader("CamelCxfMessage", Message.class);
-
         SoapMessage soapMessage = validateSoapMessage(cxfMessage);
-
         setJwtToken(cxfMessage, exchange);
-
         List<Header> headers = soapMessage.getHeaders();
-
         String userId = StringUtils.EMPTY;
         String userName = StringUtils.EMPTY;
         String action = StringUtils.EMPTY;
         boolean entitled;
-
         for (Header header : headers) {
             if (header.getObject() instanceof Element) {
                 userId = findUserIdRecursive((Element) header.getObject());
@@ -94,27 +88,20 @@ public class UserEntitlementInterceptor implements Processor {
         }
 
         // Step 3: Extract Authorization header (HTTP)
-
-
         if (userId == null || userId.isEmpty()) {
             throw new RuntimeException("userId not found in SOAP request");
         }
-
         log.info("User Id from SOAP XML : User ID : {}", userId);
-
         EntitlementService entitlementService = entitlementFactory.getEntitlementService();
-
         if (entitlementService instanceof UserRoleGroupEntitlementService) {
             log.info("Inside User group validation");
             entitled = entitlementService.isUserEntitled(userId, null);
         } else {
             entitled = entitlementService.isUserEntitled(userName, action);
         }
-
         if (!entitled) {
             throw new RuntimeException("User not entitled");
         }
-
     }
 
     private void setJwtToken(final Message cxfMessage, final Exchange exchange) {

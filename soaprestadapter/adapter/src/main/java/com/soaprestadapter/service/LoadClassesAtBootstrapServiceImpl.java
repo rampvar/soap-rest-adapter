@@ -21,6 +21,11 @@ public class LoadClassesAtBootstrapServiceImpl implements LoadClassesAtBootstrap
      */
     private final WsdlJobProperties wsdlJobProperties;
 
+    /**
+     * Load.class files from wsdl urls
+     *
+     * @throws Exception if an error occurs while processing wsdl urls
+     */
     @Override
     public void loadWsdlClassAtBootstrap() throws Exception {
         generationService.processWsdlUrls(wsdlJobProperties.getWsdlJobs());

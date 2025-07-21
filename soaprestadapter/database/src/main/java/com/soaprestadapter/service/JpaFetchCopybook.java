@@ -43,6 +43,12 @@ public class JpaFetchCopybook implements FetchResponseCopybookDataStrategy {
         return fetchResponseCopybookDataRepository.findAll();
     }
 
+    /**
+     *
+     * @param operationName to fetch data for  from the db
+     * @return
+     */
+
     @Override
     public FetchResponseCopybookDataEntity getByOperationName(final String operationName) {
         return fetchResponseCopybookDataRepository.findByOperationName(operationName);

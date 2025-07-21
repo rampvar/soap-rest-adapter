@@ -22,7 +22,11 @@ public class CommonProcessor implements Processor {
      */
     private final CobolAttributeService service;
 
-
+    /**
+     * Process incoming exchange and apply necessary transformations.
+     *
+     * @param exchange incoming exchange
+     * @throws Exception exception*/
     @Override
     public void process(final Exchange exchange) throws Exception {
         ObjectMapper mapper = new ObjectMapper();

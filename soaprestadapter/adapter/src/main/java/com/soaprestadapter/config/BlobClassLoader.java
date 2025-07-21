@@ -21,6 +21,14 @@ public class BlobClassLoader extends ClassLoader {
         this.classDataMap = classMap;
     }
 
+    /**
+     * findClass
+     * @param name
+     *
+     *
+     * @return
+     * @throws ClassNotFoundException
+     */
     @Override
     protected Class<?> findClass(final String name) throws ClassNotFoundException {
         byte[] bytes = classDataMap.get(name);
