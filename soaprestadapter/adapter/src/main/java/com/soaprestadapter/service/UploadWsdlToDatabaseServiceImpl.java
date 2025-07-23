@@ -33,10 +33,15 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
      */
     private final BlobClassLoaderServiceImpl classLoaderService;
 
+
+    //private final GeneratedWsdlClassRepository generatedWsdlClassRepository;
+
+
     /**
-     * @param wsdlUrl
-     * @param filesPath
-     * @throws IOException
+     *
+     * @param wsdlUrl wsdl url
+     * @param filesPath file path
+     *
      */
     public void uploadWsdlToDb(final String wsdlUrl, final List<Path> filesPath) {
 
@@ -75,8 +80,7 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
             } else {
                 log.warn("No valid .class files to upload for WSDL: {}", wsdlUrl);
             }
-
-            classLoaderService.loadClassesFromDb();
+            classLoaderService.loadNewClassesAtRuntime();
         } catch (IOException e) {
             log.error("Error writing class data blob to output stream: {}", e.getMessage());
         }
