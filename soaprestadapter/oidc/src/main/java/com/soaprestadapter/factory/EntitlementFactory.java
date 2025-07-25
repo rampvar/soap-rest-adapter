@@ -1,14 +1,17 @@
 package com.soaprestadapter.factory;
 
 import com.soaprestadapter.exception.IllegalArgumentException;
-import com.soaprestadapter.service.AwsIamCloudEntitlementService;
-import com.soaprestadapter.service.AwsIamLocalEntitlementService;
-import com.soaprestadapter.service.EntitlementService;
-import com.soaprestadapter.service.UserRoleGroupEntitlementService;
+import com.soaprestadapter.properties.CloudProviderProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
+import static com.soaprestadapter.constant.OidcConstant.AWS;
+import static com.soaprestadapter.constant.OidcConstant.AZURE;
+import static com.soaprestadapter.constant.OidcConstant.CLOUD_PROVIDER;
+import static com.soaprestadapter.constant.OidcConstant.DATABASE;
+import static com.soaprestadapter.constant.OidcConstant.GCP;
+import static java.net.HttpURLConnection.HTTP_BAD_REQUEST;
 
 
 /**
@@ -18,36 +21,16 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @RequiredArgsConstructor
 public class EntitlementFactory {
-    /**
-     * HTTP 400 status code for bad request.
-     */
-    private static final int HTTP_BAD_REQUEST = 400;
-    /**
-     * Get Strategy from properties
-     */
-    @Value("${entitlement.strategy}")
-    private String strategy;
 
     /**
-     * Get AWS Environment from properties
+     *  ApplicationContext for bean initialization
      */
-    @Value("${environment.aws}")
-    private String awsEnvironment;
-
+    private final ApplicationContext context;
     /**
-     * UserRoleGroupEntitlementService validate based on userID
+     * Cloud Provider Properties
      */
-    private final UserRoleGroupEntitlementService userRoleGroupService;
+    private final CloudProviderProperties props;
 
-    /**
-     * AwsIamLocalEntitlementService validate in local aws
-     */
-    private final AwsIamLocalEntitlementService awsIamLocalEntitlementService;
-
-    /**
-     * AwsIamActualEntitlementService validate in actual aws
-     */
-    private final AwsIamCloudEntitlementService awsIamCloudEntitlementService;
 
     /**
      *  getEntitlementService based on application properties
@@ -55,21 +38,21 @@ public class EntitlementFactory {
      */
 
     public EntitlementService getEntitlementService() {
-        return switch (strategy) {
-            case "USER_ROLE_GROUP" -> userRoleGroupService;
-            case "AWS_IAM" -> {
-                if ("local".equalsIgnoreCase(awsEnvironment)) {
-                    yield awsIamLocalEntitlementService;
-                } else if ("actual".equalsIgnoreCase(awsEnvironment)) {
-                    yield awsIamCloudEntitlementService;
-                } else {
-                    throw new IllegalArgumentException(HTTP_BAD_REQUEST,
-                            "Invalid environment.aws value: " + awsEnvironment);
-                }
+
+        String mode = props.getStrategy().getMode().toUpperCase();
+
+        return switch (mode) {
+            case DATABASE -> context.getBean(DATABASE, EntitlementService.class);
+            case CLOUD_PROVIDER -> {
+                String provider = props.getStrategy().getCloudProviderType().toUpperCase();
+                yield switch (provider) {
+                        case AWS, AZURE, GCP -> context.getBean(provider, EntitlementService.class);
+                        default -> throw new IllegalArgumentException(HTTP_BAD_REQUEST,
+                            "Unsupported cloud provider: " + provider);
+                    };
             }
             default -> throw new IllegalArgumentException(HTTP_BAD_REQUEST,
-                    "Invalid strategy: " + strategy);
+                    "Invalid entitlement strategy mode: " + mode);
         };
     }
-
 }

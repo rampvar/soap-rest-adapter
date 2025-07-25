@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -72,7 +73,9 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
             blobData = byteArrayOutputStream.toByteArray();
 
             if (blobData.length > 0) {
-                GeneratedWsdlClassEntity wsdlClassEntity = new GeneratedWsdlClassEntity();
+                Optional<GeneratedWsdlClassEntity> existing = storageStrategy.findByWsdlUrl(wsdlUrl);
+
+                GeneratedWsdlClassEntity wsdlClassEntity = existing.orElseGet(GeneratedWsdlClassEntity::new);
                 wsdlClassEntity.setWsdlUrl(wsdlUrl);
                 wsdlClassEntity.setClassData(blobData);
                 wsdlClassEntity.setGeneratedAt(LocalDateTime.now());

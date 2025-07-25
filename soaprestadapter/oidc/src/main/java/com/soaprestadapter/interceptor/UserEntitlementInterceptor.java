@@ -1,7 +1,7 @@
 package com.soaprestadapter.interceptor;
 
 import com.soaprestadapter.factory.EntitlementFactory;
-import com.soaprestadapter.service.EntitlementService;
+import com.soaprestadapter.factory.EntitlementService;
 import com.soaprestadapter.service.UserRoleGroupEntitlementService;
 import java.util.HashMap;
 import java.util.List;
@@ -97,6 +97,7 @@ public class UserEntitlementInterceptor implements Processor {
             log.info("Inside User group validation");
             entitled = entitlementService.isUserEntitled(userId, null);
         } else {
+            log.info("Inside CLOUD validation");
             entitled = entitlementService.isUserEntitled(userName, action);
         }
         if (!entitled) {

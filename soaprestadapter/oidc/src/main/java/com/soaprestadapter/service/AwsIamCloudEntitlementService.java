@@ -1,23 +1,33 @@
 package com.soaprestadapter.service;
 
+import com.soaprestadapter.factory.EntitlementService;
 import java.util.Map;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsSessionCredentials;
-import software.amazon.awssdk.auth.credentials.DefaultCredentialsProvider;
 import software.amazon.awssdk.services.sts.StsClient;
 import software.amazon.awssdk.services.sts.model.AssumeRoleRequest;
 import software.amazon.awssdk.services.sts.model.AssumeRoleResponse;
 import software.amazon.awssdk.services.sts.model.Credentials;
 import software.amazon.awssdk.services.sts.model.StsException;
 
+
 /**
  * AwsIamActualEntitlementService implementation.
  */
 @Service
 @Slf4j
+@Component("AWS")
+@RequiredArgsConstructor
 public class AwsIamCloudEntitlementService implements EntitlementService {
 
+
+    /**
+     * Injecting STS client
+     */
+    private final StsClient stsClient;
 
     /**
      * Simulate a permission check by checking if the provided action is allowed for the given role ARN
@@ -27,22 +37,19 @@ public class AwsIamCloudEntitlementService implements EntitlementService {
      */
     @Override
     public boolean isUserEntitled(final String username, final String action) {
-        log.info("Actual AWS Iam Entitlement");
+        log.info("CLOUD AWS Iam Entitlement");
         String roleArn = getRoleArnForUser(username);
         if (roleArn == null) {
             return false;
         }
         try {
-            StsClient stsClient1 = StsClient.builder()
-                    .credentialsProvider(DefaultCredentialsProvider.create())
-                    .build();
 
             AssumeRoleRequest assumeRoleRequest = AssumeRoleRequest.builder()
                     .roleArn(roleArn)
                     .roleSessionName("session-" + username)
                     .build();
 
-            AssumeRoleResponse assumeRoleResponse = stsClient1.assumeRole(assumeRoleRequest);
+            AssumeRoleResponse assumeRoleResponse = stsClient.assumeRole(assumeRoleRequest);
             Credentials tempCredentials = assumeRoleResponse.credentials();
 
             AwsSessionCredentials.create(

@@ -5,6 +5,7 @@ import com.soaprestadapter.Repository.GeneratedWsdlClassRepository;
 import com.soaprestadapter.WsdlToClassStorageStrategy;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
@@ -65,5 +66,15 @@ public class JpaWsdlStorage implements WsdlToClassStorageStrategy {
     @Override
     public String findPayloadTwoByOperationName(final String operationName) {
         return cobolAttributeRepository.findPayloadTwoByOperationName(operationName);
+    }
+
+    /**
+     * Method to find entity based on wsdl url
+     * @param wsdlUrl as input
+     * @return GeneratedWsdlClassEntity
+     */
+    @Override
+    public Optional<GeneratedWsdlClassEntity> findByWsdlUrl(final String wsdlUrl) {
+        return wsdlClassRepository.findByWsdlUrl(wsdlUrl);
     }
 }

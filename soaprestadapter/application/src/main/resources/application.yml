@@ -29,10 +29,46 @@ services:
       OrderTshirt: http://localhost:8080/bluage/order_tshirt
 
 entitlement:
-  strategy: USER_ROLE_GROUP  # or AWS_IAM
+  strategy:
+    mode: DB #CLOUD # DB
+    cloud-provider-type: AWS # AZURE # GCP #AWS
 
-environment:
-  aws: local # or Actual
+azure:
+  subscription-id: "de305d54-75b4-431b-adb2-eb6b9e546013"
+  required-actions:
+    read:
+      - Microsoft.Resources/subscriptions/resourceGroups/read
+      - Microsoft.Compute/virtualMachines/read
+      - Microsoft.Storage/storageAccounts/listkeys/action
+    write:
+      - Microsoft.Resources/subscriptions/resourceGroups/write
+      - Microsoft.Compute/virtualMachines/write
+      - Microsoft.Storage/storageAccounts/write
+    delete:
+      - Microsoft.Resources/subscriptions/resourceGroups/delete
+    start-vm:
+      - Microsoft.Compute/virtualMachines/start/action
+
+gcp:
+  impersonation:
+    users:
+      - username: alice
+        serviceAccount: alice-sa@project-a.iam.gserviceaccount.com
+        actions:
+          read:
+            - projects/project-a
+            - projects/_/buckets/bucket-a
+          write:
+            - projects/project-a/topics/topic-a
+
+      - username: bob
+        serviceAccount: bob-sa@project-b.iam.gserviceaccount.com
+        actions:
+          read:
+            - projects/project-b
+            - projects/_/buckets/bucket-b
+          write:
+            - projects/project-b/topics/topic-b
 
 aws:
   iam:
