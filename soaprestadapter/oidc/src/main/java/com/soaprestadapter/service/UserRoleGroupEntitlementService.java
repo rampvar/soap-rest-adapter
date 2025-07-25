@@ -1,13 +1,16 @@
 package com.soaprestadapter.service;
 
 import com.soaprestadapter.Repository.UserRepository;
+import com.soaprestadapter.factory.EntitlementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 /**
  * Service for managing user role group entitlements.
  */
+@Component("DB")
 @Slf4j
 @Service
 @RequiredArgsConstructor

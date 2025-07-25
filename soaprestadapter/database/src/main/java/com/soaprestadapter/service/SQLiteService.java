@@ -7,6 +7,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Profile;
@@ -97,6 +98,30 @@ public class SQLiteService implements WsdlToClassStorageStrategy {
     @Override
     public String findPayloadTwoByOperationName(final String operationName) {
         return null;
+    }
+
+    /**
+     * Method to retrieve entity based on wsdl url
+     * @param wsdlUrl as input
+     * @return GeneratedWsdlClassEntity
+     */
+    @Override
+    public Optional<GeneratedWsdlClassEntity> findByWsdlUrl(final String wsdlUrl) {
+        String sql = "SELECT id, wsdl_url, class_data, generated_at FROM tbl_generated_wsdl_classes WHERE wsdl_url = ?";
+
+        List<GeneratedWsdlClassEntity> result = jdbcTemplate.query(sql, new RowMapper<GeneratedWsdlClassEntity>() {
+            @Override
+            public GeneratedWsdlClassEntity mapRow(final ResultSet rs, final int rowNum) throws SQLException {
+                GeneratedWsdlClassEntity entity = new GeneratedWsdlClassEntity();
+                entity.setId(rs.getLong("id"));
+                entity.setWsdlUrl(rs.getString("wsdl_url"));
+                entity.setClassData(rs.getBytes("class_data"));
+                entity.setGeneratedAt(LocalDateTime.parse(rs.getString("generated_at")));
+                return entity;
+            }
+        }, wsdlUrl);
+
+        return result.stream().findFirst();
     }
 }
 
