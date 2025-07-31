@@ -1,7 +1,9 @@
-spring:
+custom:
   datasource:
     url: jdbc:sqlite:mydb.sqlite
     driver-class-name: org.sqlite.JDBC
+
+spring:
   sql:
     init:
       mode: always

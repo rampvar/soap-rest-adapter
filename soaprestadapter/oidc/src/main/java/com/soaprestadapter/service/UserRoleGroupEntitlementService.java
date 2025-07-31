@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.Repository.UserRepository;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.factory.EntitlementService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +19,7 @@ public class UserRoleGroupEntitlementService implements EntitlementService {
     /**
      * The user repository.
      */
-    private final UserRepository userRepository;
+    private final DatabaseService databaseService;
 
     /**
      * Checks if a user is entitled to perform a specific action.
@@ -30,6 +30,6 @@ public class UserRoleGroupEntitlementService implements EntitlementService {
      */
     @Override
     public boolean isUserEntitled(final String username, final String action) {
-        return userRepository.isUserEntitled(Long.valueOf(username));
+        return databaseService.isUserEntitled(Long.valueOf(username));
     }
 }

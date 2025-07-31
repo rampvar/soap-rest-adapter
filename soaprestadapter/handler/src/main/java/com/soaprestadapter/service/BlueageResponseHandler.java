@@ -3,7 +3,7 @@ package com.soaprestadapter.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soaprestadapter.FetchResponseCopybookDataStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.factory.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,7 @@ public class BlueageResponseHandler implements ResponseHandler {
     /**
      * repository to get response copybook data
      */
-    private  final FetchResponseCopybookDataStrategy repository;
+    private  final DatabaseService dbService;
 
     /**
      * convert rest response to Blueage format

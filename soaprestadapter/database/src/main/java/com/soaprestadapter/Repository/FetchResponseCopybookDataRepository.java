@@ -1,9 +1,11 @@
 package com.soaprestadapter.Repository;
 
 import com.soaprestadapter.entity.FetchResponseCopybookDataEntity;
+import java.util.Optional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 
 /**
  * Repository for managing {@link FetchResponseCopybookDataEntity} entities.
@@ -16,5 +18,5 @@ public interface FetchResponseCopybookDataRepository extends JpaRepository<Fetch
      * @param operationName the name of the operation
      * @return the entity with the given operation name, or null if not found.
      */
-    FetchResponseCopybookDataEntity findByOperationName(String operationName);
+    Optional<FetchResponseCopybookDataEntity> findByOperationName(String operationName);
 }

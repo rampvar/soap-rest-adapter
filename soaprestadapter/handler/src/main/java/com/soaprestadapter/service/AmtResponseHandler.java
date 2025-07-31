@@ -2,7 +2,7 @@ package com.soaprestadapter.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.soaprestadapter.FetchResponseCopybookDataStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.entity.FetchResponseCopybookDataEntity;
 import com.soaprestadapter.exception.DataBaseException;
 import com.soaprestadapter.factory.ResponseHandler;
@@ -29,9 +29,9 @@ import org.springframework.stereotype.Component;
 @Component("AMT-RESPONSE")
 public class AmtResponseHandler implements ResponseHandler {
     /**
-     * repository to get response copybook data
+     * dbService to get response copybook data
      */
-    private final FetchResponseCopybookDataStrategy repository;
+    private final DatabaseService dbService;
     /**
      * THREE - constant for 3
      */
@@ -67,7 +67,7 @@ public class AmtResponseHandler implements ResponseHandler {
     private FetchResponseCopybookDataEntity getCopyBookDataFromDb(final String operationName) {
         log.info("Fetching copy book data from database for data: {}", operationName);
         try {
-            return repository.getByOperationName(operationName);
+            return dbService.getByOperationName(operationName).get();
         } catch (DataAccessException dae) {
             log .error("Database fetch failed: {}", dae.getMessage());
             throw new DataBaseException(HTTP_INTERNAL_SERVER_ERROR, "Database fetch failed");

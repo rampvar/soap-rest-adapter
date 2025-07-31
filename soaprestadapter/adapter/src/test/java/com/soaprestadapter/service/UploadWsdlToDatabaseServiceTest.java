@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class UploadWsdlToDatabaseServiceTest {
     private UploadWsdlToDatabaseService uploadWsdlToDatabaseService;
 
     @Mock
-    private WsdlToClassStorageStrategy storageStrategy;
+    private DatabaseService storageStrategy;
 
     @Mock
     private BlobClassLoaderServiceImpl classLoaderService;

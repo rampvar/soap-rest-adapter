@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.FetchResponseCopybookDataStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.factory.ResponseHandler;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,7 +18,7 @@ public class CustomResponseHandler implements ResponseHandler {
     /**
      * repository to get response copybook data
      */
-    private  final FetchResponseCopybookDataStrategy repository;
+    private  final DatabaseService dbService;
 
     /**
      * convert rest response to custom format

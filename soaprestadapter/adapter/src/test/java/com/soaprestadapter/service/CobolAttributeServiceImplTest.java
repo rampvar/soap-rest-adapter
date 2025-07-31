@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -14,7 +14,7 @@ import static org.mockito.Mockito.when;
 public class CobolAttributeServiceImplTest {
 
     @Mock
-    private WsdlToClassStorageStrategy repository;
+    private DatabaseService repository;
 
     @InjectMocks
     private CobolAttributeServiceImpl service;

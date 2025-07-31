@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -24,7 +24,7 @@ import static org.mockito.Mockito.*;
 public class BlobClassLoaderServiceTest {
 
     @Mock
-    private WsdlToClassStorageStrategy repository;
+    private DatabaseService repository;
 
     @InjectMocks
     private BlobClassLoaderServiceImpl service; // Mockito will inject `repository` here
