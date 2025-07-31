@@ -36,3 +36,12 @@ CREATE TABLE IF NOT EXISTS tbl_role_group (
     CONSTRAINT fk_role_group_role FOREIGN KEY (role_id) REFERENCES tbl_role(role_id) ON DELETE CASCADE,
     CONSTRAINT fk_role_group_group FOREIGN KEY (user_group_id) REFERENCES tbl_user_group(user_group_id) ON DELETE CASCADE
 );
+
+CREATE TABLE IF NOT EXISTS soap_adapter_system_config (
+    id BIGINT AUTO_INCREMENT PRIMARY KEY,
+    connector_type VARCHAR(1000) NOT NULL,
+    operation_name VARCHAR(1000) NOT NULL,
+    wsdl_name VARCHAR(1000) NOT NULL,
+    operation_endpoint_url VARCHAR(1000) NOT NULL,
+    environment VARCHAR(1000) NOT NULL
+);

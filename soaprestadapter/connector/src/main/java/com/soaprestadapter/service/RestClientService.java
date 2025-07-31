@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.config.ServiceUrlConfig;
+import com.soaprestadapter.cache.CacheDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -36,9 +36,9 @@ public class RestClientService {
     private RestTemplate restTemplate = new RestTemplate();
 
     /**
-     * ServiceUrlConfig
+     * CacheDispatcher
      */
-    private final ServiceUrlConfig serviceUrlConfig;
+    private final CacheDispatcher cacheDispatcher;
 
 
     /**
@@ -63,7 +63,7 @@ public class RestClientService {
         }
         HttpEntity<String> request = new HttpEntity<>(payload, headers);
         log.info("Rest Request Payload: {}", request);
-        String url = serviceUrlConfig.getUrl(connectorName, operationName);
+        String url = cacheDispatcher.getConfig(operationName);
 
         return restTemplate.exchange(url,
                 HttpMethod.POST,
