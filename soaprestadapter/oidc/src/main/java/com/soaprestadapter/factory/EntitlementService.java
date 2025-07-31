@@ -1,4 +1,4 @@
-package com.soaprestadapter.service;
+package com.soaprestadapter.factory;
 
 /**
  * Service interface for entitlement management

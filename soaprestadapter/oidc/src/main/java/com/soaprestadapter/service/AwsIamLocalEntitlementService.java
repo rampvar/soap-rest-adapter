@@ -1,5 +1,6 @@
 package com.soaprestadapter.service;
 
+import com.soaprestadapter.factory.EntitlementService;
 import com.soaprestadapter.properties.IamConfigProperties;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -7,7 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 /**
- *      This is a implementation of the EntitlementService interface for AWS IAM local.
+ *      This is an implementation of the EntitlementService interface for AWS IAM local.
  */
 @Service
 @Slf4j

@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -26,7 +27,7 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
      * Injected SqliteService for Using jdbc template for insert
      * generated WSDL class entries from the database.
      */
-    private final WsdlToClassStorageStrategy storageStrategy;
+    private final DatabaseService dbService;
 
     /**
      * Injected class loader service
@@ -72,11 +73,13 @@ public class UploadWsdlToDatabaseServiceImpl implements UploadWsdlToDatabaseServ
             blobData = byteArrayOutputStream.toByteArray();
 
             if (blobData.length > 0) {
-                GeneratedWsdlClassEntity wsdlClassEntity = new GeneratedWsdlClassEntity();
+                Optional<GeneratedWsdlClassEntity> existing = dbService.findByWsdlUrl(wsdlUrl);
+
+                GeneratedWsdlClassEntity wsdlClassEntity = existing.orElseGet(GeneratedWsdlClassEntity::new);
                 wsdlClassEntity.setWsdlUrl(wsdlUrl);
                 wsdlClassEntity.setClassData(blobData);
                 wsdlClassEntity.setGeneratedAt(LocalDateTime.now());
-                storageStrategy.save(wsdlClassEntity);
+                dbService.save(wsdlClassEntity);
             } else {
                 log.warn("No valid .class files to upload for WSDL: {}", wsdlUrl);
             }

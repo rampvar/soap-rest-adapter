@@ -1,9 +1,11 @@
 package com.soaprestadapter.Repository;
 
 import com.soaprestadapter.entity.SystemConfigDataEntity;
+import java.util.Optional;
 import org.springframework.context.annotation.Profile;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
 
 /**
  * Repository for managing {@link SystemConfigDataEntity} entities.
@@ -16,5 +18,5 @@ public interface SystemConfigDataRepository extends JpaRepository<SystemConfigDa
      * @param operationName the name of the operation
      * @return the entity with the given operation name, or null if not found.
      */
-    SystemConfigDataEntity findByOperationName(String operationName);
+    Optional<SystemConfigDataEntity> findByOperationName(String operationName);
 }

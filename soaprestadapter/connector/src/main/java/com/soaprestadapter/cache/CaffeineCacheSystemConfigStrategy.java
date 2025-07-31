@@ -1,6 +1,6 @@
 package com.soaprestadapter.cache;
 
-import com.soaprestadapter.Repository.SystemConfigDataRepository;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.entity.SystemConfigDataEntity;
 import java.util.List;
 import java.util.Optional;
@@ -20,7 +20,7 @@ public class CaffeineCacheSystemConfigStrategy extends
     /**
      * SystemConfigDataRepository
      */
-    private final SystemConfigDataRepository repository;
+    private final DatabaseService databaseService;
 
     /**
      * @param operationName operation name
@@ -29,7 +29,7 @@ public class CaffeineCacheSystemConfigStrategy extends
     @Override
     protected Optional<SystemConfigDataEntity> loadFromDatabase
     (final String operationName) {
-        return Optional.ofNullable(repository.findByOperationName(operationName));
+        return databaseService.findByOperationName(operationName);
     }
 
     /**
@@ -46,7 +46,7 @@ public class CaffeineCacheSystemConfigStrategy extends
      */
     @Override
     public void preload() {
-        List<SystemConfigDataEntity> allConfigs = repository.findAll();
+        List<SystemConfigDataEntity> allConfigs = databaseService.findAllForSystemConfig();
         allConfigs.forEach(config ->
                 getConfig(config.getOperationName()) // this triggers caching
         );

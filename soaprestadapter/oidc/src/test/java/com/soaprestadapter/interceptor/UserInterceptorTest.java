@@ -4,7 +4,7 @@ import com.soaprestadapter.Repository.UserRepository;
 import com.soaprestadapter.factory.EntitlementFactory;
 import com.soaprestadapter.service.AwsIamCloudEntitlementService;
 import com.soaprestadapter.service.AwsIamLocalEntitlementService;
-import com.soaprestadapter.service.EntitlementService;
+import com.soaprestadapter.factory.EntitlementService;
 import com.soaprestadapter.service.UserRoleGroupEntitlementService;
 import org.apache.camel.Exchange;
 import org.apache.camel.Message;

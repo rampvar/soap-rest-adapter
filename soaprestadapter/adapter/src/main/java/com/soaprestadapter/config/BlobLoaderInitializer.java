@@ -1,6 +1,6 @@
 package com.soaprestadapter.config;
 
-import com.soaprestadapter.Repository.GeneratedWsdlClassRepository;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.service.BlobClassLoaderService;
 import com.soaprestadapter.service.LoadClassesAtBootstrapService;
 import jakarta.annotation.PostConstruct;
@@ -29,7 +29,7 @@ public class BlobLoaderInitializer {
     /**
      * Respository class to check tbl_generate_Wsdl_class
      */
-    private final GeneratedWsdlClassRepository generatedWsdlClassRepository;
+    private final DatabaseService databaseService;
 
     /**
      * Loads classes from the database during application startup.
@@ -37,7 +37,7 @@ public class BlobLoaderInitializer {
      */
     @PostConstruct
     public void init() throws Exception {
-        if (generatedWsdlClassRepository.count() == 0) {
+        if (databaseService.getEntityCount().orElse(0L) == 0) {
             loadWsdlClassesAtBootstrapService.loadWsdlClassAtBootstrap();
         }
         blobClassLoaderService.loadClassesFromDb();

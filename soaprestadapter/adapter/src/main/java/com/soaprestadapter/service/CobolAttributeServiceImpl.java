@@ -1,6 +1,6 @@
 package com.soaprestadapter.service;
 
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.exception.DataBaseException;
 import com.soaprestadapter.exception.IllegalArgumentException;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ public class CobolAttributeServiceImpl implements CobolAttributeService {
      * CobolAttributeRepository
      */
     //private final CobolAttributeRepository repository;
-    private  final WsdlToClassStorageStrategy repository;
+    private  final DatabaseService repository;
     /**
      * HTTP status code indicating an internal server error (500).
      * Used to signal that the server encountered an unexpected condition

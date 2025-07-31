@@ -1,6 +1,6 @@
 package com.soaprestadapter.factory;
 
-import com.soaprestadapter.FetchResponseCopybookDataStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.model.ResponseType;
 import com.soaprestadapter.service.AmtResponseHandler;
 import com.soaprestadapter.service.BlueageResponseHandler;
@@ -18,7 +18,7 @@ public class ResponseHandlerFactory {
     /**
      * Db class for handling REST responses payload with copybook.
      */
-    private final FetchResponseCopybookDataStrategy fetchResponseCopybookDataStrategy;
+    private final DatabaseService dbService;
 
     /**
      * ResponseHandler for handling REST responses.
@@ -33,13 +33,13 @@ public class ResponseHandlerFactory {
         }
         switch (responseType) {
             case AMT_RESPONSE -> {
-                return new AmtResponseHandler(fetchResponseCopybookDataStrategy);
+                return new AmtResponseHandler(dbService);
             }
             case BLUEAGE_RESPONSE -> {
-                return new BlueageResponseHandler(fetchResponseCopybookDataStrategy);
+                return new BlueageResponseHandler(dbService);
             }
             case CUSTOM_RESPONSE -> {
-                return new CustomResponseHandler(fetchResponseCopybookDataStrategy);
+                return new CustomResponseHandler(dbService);
             }
             default -> {
                 return null;

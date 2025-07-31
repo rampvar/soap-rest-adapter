@@ -2,7 +2,7 @@ package com.soaprestadapter.service;
 
 
 import aj.org.objectweb.asm.ClassReader;
-import com.soaprestadapter.WsdlToClassStorageStrategy;
+import com.soaprestadapter.DatabaseService;
 import com.soaprestadapter.config.BlobClassLoader;
 import com.soaprestadapter.config.BlobClassRegistry;
 import com.soaprestadapter.entity.GeneratedWsdlClassEntity;
@@ -34,7 +34,7 @@ import org.springframework.stereotype.Service;
 public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
 
     /** Repository to access stored class blobs. */
-    private final WsdlToClassStorageStrategy repository;
+    private final DatabaseService databaseService;
 
     /**
      * Instance of the custom class loader that holds dynamically loaded classes
@@ -215,7 +215,7 @@ public class BlobClassLoaderServiceImpl implements BlobClassLoaderService {
      */
     private List<GeneratedWsdlClassEntity> safeFetchFromDb() {
         try {
-            return repository.findAll();
+            return databaseService.findAll();
         } catch (DataAccessException dae) {
             log.debug("Database fetch failed: {}", dae.getMessage(), dae);
             return Collections.emptyList();
